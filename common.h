@@ -10,7 +10,9 @@
 #define byte unsigned char
 
 #define SQUARE_COLOR(face, square) (((face) >> (8 * (8 - square))) & 0xff)
-#define SET_SQUARE_COLOR(face, square, color) (face |= (color << ( 8 * (8 - square)))) 
+#define SET_SQUARE_COLOR(face, square, color) (face |= (color << (8 * (8 - square)))) 
+#define ROTATE_RIGHT(face) ((face >> (8 * 2)) | (face << (8 * 6)))  
+#define ROTATE_LEFT(face) ((face << (8 * 2)) | (face >> (8 * 6)))
 
 extern bool debug_enabled;
 extern bool use_terminal_colors;
@@ -46,7 +48,7 @@ char * COLOR_NAMES[];
 char * COLOR_CODES[10];
 
 extern const uint_64 ADJACENT_SIDES[SIDES][4];
-extern const uint_64 ADJACENCY_LIST[SIDES][4][3];
+extern const int ADJACENT_SQUARES[SIDES][4][3];
 
 extern const int CUBE_REPRESENTATION_LENGTH;
 
@@ -71,6 +73,6 @@ int SquareRepresentationPattern[3][3];
 void PrintCubeRepresentation(Cube *);
 void PrintInvalidRepresentationMessage();
 
-void Move(Cube *, uint_64, int);
+void Rotate(Cube *, uint_64, bool);
 
 void DisposeCube(Cube *);

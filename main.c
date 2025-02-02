@@ -21,6 +21,9 @@ int main(int argc, char const *argv[])
 
     printf("%s\n\n", representation);
 
+    Rotate(&cube, FRONT, false);
+    PrintCubeRepresentation(&cube);
+
     free(representation);
     DisposeCube(&cube);
     return 0;

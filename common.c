@@ -134,7 +134,7 @@ const uint_64 ADJACENT_SIDES[SIDES][4] = {
     { BACK, RIGHT, FRONT, LEFT} , // TOP
 };
 
-const uint_64 ADJACENCY_LIST[SIDES][4][3] = {
+const int ADJACENT_SQUARES[SIDES][4][3] = {
     {
         {7,6,5}, {7,6,5}, {7,6,5}, {7,6,5}   // DOWN
     },
@@ -234,10 +234,6 @@ char * GetCubeString(Cube * cube) {
     return cubeString;
 }
 
-void DisposeCube(Cube * cube) {
-    free(cube -> Faces);
-}
-
 void PrintColorNames() {
     for (int i = 0; i < SIDES; ++i) {
         printf("%s: %c %s%c\e[0m\n",
@@ -326,4 +322,56 @@ void PrintInvalidRepresentationMessage() {
         printf("\n\nTOP: %c, FRONT: %c", CHAR_VALUES [ UP ], CHAR_VALUES [ FRONT ]);
 
         printf("\n\n");
+}
+
+void RotateAdjacent(Cube * cube, uint_64 face, bool inverted) {
+    uint_64 * adjacent = ADJACENT_SIDES[face];
+
+    uint_64 temp = cube -> Faces [ adjacent[0] ];
+
+    for (int i = 0; i < 4; ++i) {
+
+        bool isLastSide = i == 3;
+        int destIndex = isLastSide ? 0 : (i+1);
+
+        uint_64 destination = adjacent [destIndex];
+
+        int * sourceSquares = ADJACENT_SQUARES[face][i];
+        int * destinationSquares = ADJACENT_SQUARES[face][destIndex];
+
+        printf("\n");
+
+        for (int j = 0; j < 3; ++j) {
+            
+            printf("\n%d -> %d, ", sourceSquares[j], destinationSquares[j]);
+
+            uint_64 color = SQUARE_COLOR(
+                (temp),
+                (sourceSquares[j])
+            );
+            printf("\nsource color: %d=%c", color, CHAR_VALUES [color]);
+            
+            temp = cube -> Faces [ destination ];
+
+            SET_SQUARE_COLOR(
+                (cube -> Faces [ destination ]),
+                (destinationSquares[j]),
+                color
+            );
+        }
+    }
+}
+
+void Rotate(Cube * cube, uint_64 face, bool inverted) {
+    if (inverted) {
+        cube -> Faces [face] = ROTATE_LEFT(cube -> Faces [face]);
+    } else {
+        cube -> Faces [face] = ROTATE_RIGHT(cube -> Faces [face]);
+    }
+    
+    //RotateAdjacent(cube, face, inverted);
+}
+
+void DisposeCube(Cube * cube) {
+    free(cube -> Faces);
 }
