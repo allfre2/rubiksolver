@@ -15,19 +15,19 @@
 extern bool debug_enabled;
 extern bool use_terminal_colors;
 
-extern const uint_64 WHITE;
-extern const uint_64 GREEN;
-extern const uint_64 RED;
-extern const uint_64 BLUE;
-extern const uint_64 ORANGE;
-extern const uint_64 YELLOW;
-
 extern const uint_64 DOWN;
 extern const uint_64 RIGHT;
 extern const uint_64 FRONT;
 extern const uint_64 LEFT;
 extern const uint_64 BACK;
 extern const uint_64 UP;
+
+extern const uint_64 WHITE;
+extern const uint_64 GREEN;
+extern const uint_64 RED;
+extern const uint_64 BLUE;
+extern const uint_64 ORANGE;
+extern const uint_64 YELLOW;
 
 extern const char WHITE_CHAR;
 extern const char GREEN_CHAR;
@@ -41,8 +41,12 @@ extern const char LEGAL_COLORS[];
 
 uint_64 COLOR_VALUES [100];
 char CHAR_VALUES[SIDES];
+char FACE_CHARS[SIDES];
 char * COLOR_NAMES[];
 char * COLOR_CODES[10];
+
+extern const uint_64 ADJACENT_SIDES[SIDES][4];
+extern const uint_64 ADJACENCY_LIST[SIDES][4][3];
 
 extern const int CUBE_REPRESENTATION_LENGTH;
 
@@ -63,7 +67,10 @@ char * GetCubeString(Cube *);
 
 uint_64 RepresentationPattern[3][4];
 int SquareRepresentationPattern[3][3];
+
 void PrintCubeRepresentation(Cube *);
 void PrintInvalidRepresentationMessage();
+
+void Move(Cube *, uint_64, int);
 
 void DisposeCube(Cube *);

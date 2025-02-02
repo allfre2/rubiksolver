@@ -5,3 +5,6 @@ Scramble:
 
 Position:
     RRYYBBRBOGWROGWORGYOGRWWGWYYYBWWGBOYBOBGOWGYROBR
+
+TODO:
+    Define, perform and test rotations

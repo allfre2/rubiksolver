@@ -8,7 +8,7 @@ OUT= $(WORKINGDIR)/unisolver
 SOURCES = main.c common.c 
 RM = rm
 
-default: resetenv unisolver clean
+default: resetenv unisolver removebinaries
 
 resetenv:
 	if [ -d $(WORKINGDIR) ]; then rm -rf $(WORKINGDIR); fi
@@ -23,10 +23,12 @@ win32:
 win64: 
 	x86_64-w64-mingw32-gcc -o $(OUT)64.exe $(CFLAGS) $(SOURCES)
 
-clean: 
+removebinaries:
 	rm *.o
 
-all: resetenv unisolver win32 win64 clean
+clean: resetenv removebinaries
+
+all: resetenv unisolver win32 win64 removebinaries
 
 install: 
 	@sudo cp $(OUT)/* /usr/bin

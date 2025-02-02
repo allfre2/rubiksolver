@@ -5,27 +5,27 @@ bool debug_enabled = false;
 #if defined(_WIN32) || defined(_WIN64)
     bool use_terminal_colors = false;
 #else
-    bool use_terminal_colors = false;
+    bool use_terminal_colors = true;
 #endif
 
-const uint_64 WHITE =  0x00;
-const uint_64 GREEN =  0x01;
-const uint_64 RED =    0x02;
-const uint_64 BLUE =   0x03;
-const uint_64 ORANGE = 0x04;
-const uint_64 YELLOW = 0x05;
+const uint_64 DOWN  = 0x00;
+const uint_64 RIGHT = 0x01;
+const uint_64 FRONT = 0x02;
+const uint_64 LEFT  = 0x03;
+const uint_64 BACK  = 0x04;
+const uint_64 UP    = 0x05;
 
-const uint_64 DOWN = WHITE;
-const uint_64 RIGHT = GREEN;
-const uint_64 FRONT = RED;
-const uint_64 LEFT = BLUE;
-const uint_64 BACK = ORANGE;
-const uint_64 UP = YELLOW;
+const uint_64 WHITE  = DOWN;
+const uint_64 GREEN  = RIGHT;
+const uint_64 RED    = FRONT;
+const uint_64 BLUE   = LEFT;
+const uint_64 ORANGE = BACK;
+const uint_64 YELLOW = UP;
 
-const char WHITE_CHAR = 'W';
-const char GREEN_CHAR = 'G';
-const char RED_CHAR = 'R';
-const char BLUE_CHAR = 'B';
+const char WHITE_CHAR  = 'W';
+const char GREEN_CHAR  = 'G';
+const char RED_CHAR    = 'R';
+const char BLUE_CHAR   = 'B';
 const char ORANGE_CHAR = 'O';
 const char YELLOW_CHAR = 'Y';
 const char EMPTY_SQUARE_CHAR = '.';
@@ -64,32 +64,39 @@ int Strlen(char * str) {
 }
 
 void Init() {
-    COLOR_VALUES[WHITE_CHAR] = WHITE;
-    COLOR_VALUES[GREEN_CHAR] = GREEN;
-    COLOR_VALUES[RED_CHAR] = RED;
-    COLOR_VALUES[BLUE_CHAR] = BLUE;
+    COLOR_VALUES[WHITE_CHAR]  = WHITE;
+    COLOR_VALUES[GREEN_CHAR]  = GREEN;
+    COLOR_VALUES[RED_CHAR]    = RED;
+    COLOR_VALUES[BLUE_CHAR]   = BLUE;
     COLOR_VALUES[ORANGE_CHAR] = ORANGE;
     COLOR_VALUES[YELLOW_CHAR] = YELLOW;
 
-    CHAR_VALUES[WHITE] = WHITE_CHAR;
-    CHAR_VALUES[GREEN] = GREEN_CHAR;
-    CHAR_VALUES[RED] = RED_CHAR;
-    CHAR_VALUES[BLUE] = BLUE_CHAR;
+    CHAR_VALUES[WHITE]  = WHITE_CHAR;
+    CHAR_VALUES[GREEN]  = GREEN_CHAR;
+    CHAR_VALUES[RED]    = RED_CHAR;
+    CHAR_VALUES[BLUE]   = BLUE_CHAR;
     CHAR_VALUES[ORANGE] = ORANGE_CHAR;
     CHAR_VALUES[YELLOW] = YELLOW_CHAR;
 
-    COLOR_NAMES[WHITE] = "White";
-    COLOR_NAMES[GREEN] = "Green";
-    COLOR_NAMES[RED] = "Red";
-    COLOR_NAMES[BLUE] = "Blue";
+    FACE_CHARS[DOWN]  = 'D';
+    FACE_CHARS[RIGHT] = 'R';
+    FACE_CHARS[FRONT] = 'F';
+    FACE_CHARS[LEFT]  = 'L';
+    FACE_CHARS[BACK]  = 'B';
+    FACE_CHARS[UP]    = 'U';
+
+    COLOR_NAMES[WHITE]  = "White";
+    COLOR_NAMES[GREEN]  = "Green";
+    COLOR_NAMES[RED]    = "Red";
+    COLOR_NAMES[BLUE]   = "Blue";
     COLOR_NAMES[ORANGE] = "Orange";
     COLOR_NAMES[YELLOW] = "Yellow";
 
-    COLOR_CODES[WHITE] = "\e[0;107m"; //"\e[47m";
-    COLOR_CODES[GREEN] = "\e[0;102m"; //"\e[42m";
-    COLOR_CODES[RED] = "\e[0;101m"; //"\e[41m";
-    COLOR_CODES[BLUE] = "\e[0;104m"; //"\e[44m";
-    COLOR_CODES[ORANGE] = "\e[45m"; //"\e[45m";
+    COLOR_CODES[WHITE]  = "\e[0;107m";
+    COLOR_CODES[GREEN]  = "\e[0;102m";
+    COLOR_CODES[RED]    = "\e[0;101m";
+    COLOR_CODES[BLUE]   = "\e[0;104m";
+    COLOR_CODES[ORANGE] = "\e[45m";
     COLOR_CODES[YELLOW] = "\e[43m";
 
     RepresentationPattern[0][0] = EMPTY_FACE;
@@ -117,6 +124,36 @@ void Init() {
     SquareRepresentationPattern[2][1] = 6;
     SquareRepresentationPattern[2][2] = 5;
 }
+
+const uint_64 ADJACENT_SIDES[SIDES][4] = {
+    { FRONT, RIGHT, BACK, LEFT }, // DOWN
+    { UP, BACK, DOWN, FRONT },    // RIGHT
+    { UP, RIGHT, DOWN, LEFT },    // FRONT
+    { UP, FRONT, DOWN, BACK },    // LEFT
+    { UP, LEFT, DOWN, RIGHT },    // BACK
+    { BACK, RIGHT, FRONT, LEFT} , // TOP
+};
+
+const uint_64 ADJACENCY_LIST[SIDES][4][3] = {
+    {
+        {7,6,5}, {7,6,5}, {7,6,5}, {7,6,5}   // DOWN
+    },
+    {
+        {5,4,3}, {1,8,7}, {5,4,3}, {5,4,3}   // RIGHT
+    },
+    {
+        {7, 6, 5}, {1,8,7}, {3,2,1}, {5,4,3} // FRONT
+    },
+    {
+        {1,8,7}, {1,8,7}, {1,8,7}, {5,4,3}   // LEFT
+    },
+    {
+        {3,2,1}, {1,8,7}, {7,6,5}, {5,4,3}   // BACK
+    },
+    {
+        {3,2,1}, {1,2,3}, {3,2,1}, {3,2,1}   // TOP
+    },
+};
 
 bool IsLegalChar(char c) {
     int i = 0;
@@ -203,7 +240,11 @@ void DisposeCube(Cube * cube) {
 
 void PrintColorNames() {
     for (int i = 0; i < SIDES; ++i) {
-        printf("%s: %c\n", COLOR_NAMES [ ORDER [ i ] ], CHAR_VALUES [ ORDER [ i ] ]);
+        printf("%s: %c %s%c\e[0m\n",
+            COLOR_NAMES [ ORDER [ i ] ],
+            CHAR_VALUES [ ORDER [ i ] ],
+            use_terminal_colors ?  COLOR_CODES [ ORDER [ i ] ] : "",
+            ' ');
     }
 }
 
@@ -229,7 +270,7 @@ void PrintFaceRow(Cube * cube, uint_64 face, int square1, int square2, int squar
 
     char
         char1 = CHAR_VALUES [ color1 ],
-        char2 = (square2 == CENTER_SQUARE) ? CHAR_VALUES [ face ] :  CHAR_VALUES [ color2 ],
+        char2 = (square2 == CENTER_SQUARE) ? FACE_CHARS [ face ] :  CHAR_VALUES [ color2 ],
         char3 = CHAR_VALUES [ color3 ];
 
     if (use_terminal_colors)
