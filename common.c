@@ -8,19 +8,19 @@ bool debug_enabled = false;
     bool use_terminal_colors = true;
 #endif
 
-const uint_64 DOWN  = 0x00;
-const uint_64 RIGHT = 0x01;
-const uint_64 FRONT = 0x02;
-const uint_64 LEFT  = 0x03;
-const uint_64 BACK  = 0x04;
-const uint_64 UP    = 0x05;
+const u_int DOWN  = 0x00;
+const u_int RIGHT = 0x01;
+const u_int FRONT = 0x02;
+const u_int LEFT  = 0x03;
+const u_int BACK  = 0x04;
+const u_int UP    = 0x05;
 
-const uint_64 WHITE  = DOWN;
-const uint_64 GREEN  = RIGHT;
-const uint_64 RED    = FRONT;
-const uint_64 BLUE   = LEFT;
-const uint_64 ORANGE = BACK;
-const uint_64 YELLOW = UP;
+const u_int WHITE  = DOWN;
+const u_int GREEN  = RIGHT;
+const u_int RED    = FRONT;
+const u_int BLUE   = LEFT;
+const u_int ORANGE = BACK;
+const u_int YELLOW = UP;
 
 const char WHITE_CHAR  = 'W';
 const char GREEN_CHAR  = 'G';
@@ -41,7 +41,7 @@ const char LEGAL_COLORS[] = {
     YELLOW_CHAR
 };
 
-const uint_64 ORDER [SIDES] = {
+const u_int ORDER [SIDES] = {
     LEFT,
     FRONT,
     RIGHT,
@@ -124,15 +124,15 @@ void Init() {
     SquareRepresentationPattern[2][1] = 6;
     SquareRepresentationPattern[2][2] = 5;
 
-    for (int sq = 1; sq < SQUARE_COUNT+1; ++sq) {
-        SQUARE_MASKS [ sq ] = ~ (SQUARE_FIRST_BYTE << (SQUARE_SIZE * (SQUARE_COUNT - sq)));
+    for (int sq = 1; sq < FACE_SQUARE_COUNT+1; ++sq) {
+        FACE_SQUARE_MASKS [ sq ] = ~ (SQUARE_FIRST_BYTE << (SQUARE_SIZE * (FACE_SQUARE_COUNT - sq)));
         if (debug_enabled) {
-            printf("\n%016llx\n", SQUARE_MASKS [sq]);
+            printf("\n%016llx\n", FACE_SQUARE_MASKS [sq]);
         }
     }
 }
 
-const uint_64 ADJACENT_SIDES[SIDES][4] = {
+const u_int ADJACENT_SIDES[SIDES][4] = {
     { FRONT, RIGHT, BACK, LEFT }, // DOWN
     { UP, BACK, DOWN, FRONT },    // RIGHT
     { UP, RIGHT, DOWN, LEFT },    // FRONT
@@ -189,8 +189,8 @@ bool IsValidCubeString(char * string) {
 
 void ParseCube(char * position, Cube * cube) {
 
-    cube -> Faces = malloc(sizeof(uint_64) * SIDES);
-    memset(cube -> Faces, 0, sizeof(uint_64) * SIDES);
+    cube -> Faces = malloc(sizeof(u_int) * SIDES);
+    memset(cube -> Faces, 0, sizeof(u_int) * SIDES);
 
     int i = 0;
     int face = 0;
@@ -198,7 +198,7 @@ void ParseCube(char * position, Cube * cube) {
 
     while (position[i]) {
 
-        uint_64 color = COLOR_VALUES [ position [i] ];
+        u_int color = COLOR_VALUES [ position [i] ];
 
         SET_SQUARE_COLOR(
             cube -> Faces [ ORDER [ face ] ],
@@ -259,9 +259,9 @@ void PrintFaceOrder() {
     }
 }
 
-void PrintFaceRow(Cube * cube, uint_64 face, int square1, int square2, int square3) {
+void PrintFaceRow(Cube * cube, u_int face, int square1, int square2, int square3) {
 
-    uint_64 
+    u_int 
         color1 = SQUARE_COLOR( cube -> Faces [face], square1 ),
         color2 = SQUARE_COLOR( cube -> Faces [face], square2 ),
         color3 = SQUARE_COLOR( cube -> Faces [face], square3 );
@@ -295,7 +295,7 @@ void PrintCubeRepresentation(Cube * cube) {
         for (int face_row = 0; face_row < 3; ++face_row) {
             for (int column = 0; column < 4; ++column) {
 
-                uint_64 face = RepresentationPattern[row][column];
+                u_int face = RepresentationPattern[row][column];
 
                 int square1, square2, square3;
 
@@ -331,7 +331,7 @@ void PrintInvalidRepresentationMessage() {
         printf("\n\n");
 }
 
-void Rotate(Cube * cube, uint_64 face, bool inverted) {
+void Rotate(Cube * cube, u_int face, bool inverted) {
     if (inverted) {
         cube -> Faces [face] = ROTATE_LEFT(cube -> Faces [face]);
     } else {
