@@ -31,7 +31,8 @@
 #endif
 
 #define SQUARE_COLOR(face, square) (((face) >> (SQUARE_SIZE * (FACE_SQUARE_COUNT - square))) & SQUARE_FIRST_BYTE)
-#define SET_SQUARE_COLOR(face, square, color) (face |= (color << (SQUARE_SIZE * (FACE_SQUARE_COUNT - square)))) 
+#define SET_SQUARE_COLOR(face, square, color) (face |= (color << (SQUARE_SIZE * (FACE_SQUARE_COUNT - square))))
+#define UPDATE_SQUARE_COLOR(face, square, color) (face = ((face & FACE_SQUARE_MASKS [square]) | (color << (SQUARE_SIZE * (FACE_SQUARE_COUNT - square)))))
 #define ROTATE_RIGHT(face) ((face >> (SQUARE_SIZE * 2)) | (face << (SQUARE_SIZE * 6)))
 #define ROTATE_LEFT(face) ((face << (SQUARE_SIZE * 2)) | (face >> (SQUARE_SIZE * 6)))
 
