@@ -3,6 +3,7 @@
 #define SIDES 6
 #define EMPTY_FACE -1
 #define CENTER_SQUARE 9
+#define CUBE_REPRESENTATION_LENGTH 48
 
 #if defined(USE_32_BITS)
     #define SQUARE_SIZE 4
@@ -74,7 +75,7 @@ extern const char ORANGE_CHAR;
 extern const char YELLOW_CHAR;
 extern const char EMPTY_SQUARE_CHAR;
 
-extern const char * SOLVED_POSITION;
+extern const char SOLVED_POSITION[];
 extern const char * LEGAL_MOVES;
 extern const char LEGAL_COLORS[];
 
@@ -87,8 +88,6 @@ char * COLOR_CODES[SIDES];
 extern const u_int ADJACENT_SIDES[SIDES][4];
 extern const int ADJACENT_SQUARES[SIDES][4][3];
 u_int FACE_SQUARE_MASKS[FACE_SQUARE_COUNT+1];
-
-extern const int CUBE_REPRESENTATION_LENGTH;
 
 void EnableDebug(bool);
 int Strlen(char *);
