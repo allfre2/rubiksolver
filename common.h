@@ -46,6 +46,19 @@ extern const u_int LEFT;
 extern const u_int BACK;
 extern const u_int UP;
 
+extern const char DOWN_CHAR;
+extern const char RIGHT_CHAR;
+extern const char FRONT_CHAR;
+extern const char LEFT_CHAR;
+extern const char BACK_CHAR;
+extern const char UP_CHAR;
+extern const char DOWN_PRIME_CHAR;
+extern const char RIGHT_PRIME_CHAR;
+extern const char FRONT_PRIME_CHAR;
+extern const char LEFT_PRIME_CHAR;
+extern const char BACK_PRIME_CHAR;
+extern const char UP_PRIME_CHAR;
+
 extern const u_int WHITE;
 extern const u_int GREEN;
 extern const u_int RED;
@@ -61,10 +74,12 @@ extern const char ORANGE_CHAR;
 extern const char YELLOW_CHAR;
 extern const char EMPTY_SQUARE_CHAR;
 
+extern const char * SOLVED_POSITION;
+extern const char * LEGAL_MOVES;
 extern const char LEGAL_COLORS[];
 
 u_int COLOR_VALUES [100];
-char CHAR_VALUES[SIDES];
+char COLOR_CHARS[SIDES];
 char FACE_CHARS[SIDES];
 char * COLOR_NAMES[SIDES];
 char * COLOR_CODES[SIDES];

@@ -15,6 +15,19 @@ const u_int LEFT  = 0x03;
 const u_int BACK  = 0x04;
 const u_int UP    = 0x05;
 
+const char DOWN_CHAR        = 'D';
+const char RIGHT_CHAR       = 'R';
+const char FRONT_CHAR       = 'F';
+const char LEFT_CHAR        = 'L';
+const char BACK_CHAR        = 'B';
+const char UP_CHAR          = 'U';
+const char DOWN_PRIME_CHAR  = 'd';
+const char RIGHT_PRIME_CHAR = 'r';
+const char FRONT_PRIME_CHAR = 'f';
+const char LEFT_PRIME_CHAR  = 'l';
+const char BACK_PRIME_CHAR  = 'b';
+const char UP_PRIME_CHAR    = 'u';
+
 const u_int WHITE  = DOWN;
 const u_int GREEN  = RIGHT;
 const u_int RED    = FRONT;
@@ -31,6 +44,23 @@ const char YELLOW_CHAR = 'Y';
 const char EMPTY_SQUARE_CHAR = '.';
 
 const int CUBE_REPRESENTATION_LENGTH = 48;
+
+const char * SOLVED_POSITION = "BBBBBBBBRRRRRRRRGGGGGGGGOOOOOOOOYYYYYYYYWWWWWWWW";
+
+const char * LEGAL_MOVES = {
+    DOWN_CHAR,
+    RIGHT_CHAR,
+    FRONT_CHAR,
+    LEFT_CHAR,
+    BACK_CHAR,
+    UP_CHAR,
+    DOWN_PRIME_CHAR,
+    RIGHT_PRIME_CHAR,
+    FRONT_PRIME_CHAR,
+    LEFT_PRIME_CHAR,
+    BACK_PRIME_CHAR,
+    UP_PRIME_CHAR
+};
 
 const char LEGAL_COLORS[] = {
     WHITE_CHAR,
@@ -71,12 +101,12 @@ void Init() {
     COLOR_VALUES[ORANGE_CHAR] = ORANGE;
     COLOR_VALUES[YELLOW_CHAR] = YELLOW;
 
-    CHAR_VALUES[WHITE]  = WHITE_CHAR;
-    CHAR_VALUES[GREEN]  = GREEN_CHAR;
-    CHAR_VALUES[RED]    = RED_CHAR;
-    CHAR_VALUES[BLUE]   = BLUE_CHAR;
-    CHAR_VALUES[ORANGE] = ORANGE_CHAR;
-    CHAR_VALUES[YELLOW] = YELLOW_CHAR;
+    COLOR_CHARS[WHITE]  = WHITE_CHAR;
+    COLOR_CHARS[GREEN]  = GREEN_CHAR;
+    COLOR_CHARS[RED]    = RED_CHAR;
+    COLOR_CHARS[BLUE]   = BLUE_CHAR;
+    COLOR_CHARS[ORANGE] = ORANGE_CHAR;
+    COLOR_CHARS[YELLOW] = YELLOW_CHAR;
 
     FACE_CHARS[DOWN]  = 'D';
     FACE_CHARS[RIGHT] = 'R';
@@ -234,7 +264,7 @@ char * GetCubeString(Cube * cube) {
     for (int i = 0; i < SIDES; ++i) {
         for (int square = 1; square <= 8; ++square) {
             unsigned char color = SQUARE_COLOR(cube -> Faces [ ORDER [ i ] ], square);
-            cubeString [ strIndex++ ] = CHAR_VALUES [ color ];
+            cubeString [ strIndex++ ] = COLOR_CHARS [ color ];
         }
     }
 
@@ -245,7 +275,7 @@ void PrintColorNames() {
     for (int i = 0; i < SIDES; ++i) {
         printf("%s: %c %s%c\e[0m\n",
             COLOR_NAMES [ ORDER [ i ] ],
-            CHAR_VALUES [ ORDER [ i ] ],
+            COLOR_CHARS [ ORDER [ i ] ],
             use_terminal_colors ?  COLOR_CODES [ ORDER [ i ] ] : "",
             ' ');
     }
@@ -254,7 +284,7 @@ void PrintColorNames() {
 void PrintFaceOrder() {
     int i = 0;
     while (i < SIDES) {
-        printf("%c", CHAR_VALUES [ ORDER [ i ] ]);
+        printf("%c", COLOR_CHARS [ ORDER [ i ] ]);
         ++i;
     }
 }
@@ -272,9 +302,9 @@ void PrintFaceRow(Cube * cube, u_int face, int square1, int square2, int square3
         * code3 = COLOR_CODES [ color3 ];
 
     char
-        char1 = CHAR_VALUES [ color1 ],
-        char2 = (square2 == CENTER_SQUARE) ? FACE_CHARS [ face ] :  CHAR_VALUES [ color2 ],
-        char3 = CHAR_VALUES [ color3 ];
+        char1 = COLOR_CHARS [ color1 ],
+        char2 = (square2 == CENTER_SQUARE) ? FACE_CHARS [ face ] :  COLOR_CHARS [ color2 ],
+        char3 = COLOR_CHARS [ color3 ];
 
     if (use_terminal_colors)
     {
@@ -326,7 +356,7 @@ void PrintInvalidRepresentationMessage() {
         printf("\nFace Order is: ");
         PrintFaceOrder();
 
-        printf("\n\nTOP: %c, FRONT: %c", CHAR_VALUES [ UP ], CHAR_VALUES [ FRONT ]);
+        printf("\n\nTOP: %c, FRONT: %c", COLOR_CHARS [ UP ], COLOR_CHARS [ FRONT ]);
 
         printf("\n\n");
 }
