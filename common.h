@@ -1,6 +1,8 @@
 #define SIDES 6
 #define EMPTY_FACE -1
 #define CENTER_SQUARE 9
+#define SQUARE_SIZE 8 // bits
+#define SQUARE_COUNT 8
 
 #define bool int
 #define true 1
@@ -9,10 +11,12 @@
 #define uint_32 unsigned int
 #define byte unsigned char
 
-#define SQUARE_COLOR(face, square) (((face) >> (8 * (8 - square))) & 0xff)
-#define SET_SQUARE_COLOR(face, square, color) (face |= (color << (8 * (8 - square)))) 
-#define ROTATE_RIGHT(face) ((face >> (8 * 2)) | (face << (8 * 6)))  
-#define ROTATE_LEFT(face) ((face << (8 * 2)) | (face >> (8 * 6)))
+#define SQUARE_FIRST_BYTE ((uint_64)0x00000000000000ff)
+
+#define SQUARE_COLOR(face, square) (((face) >> (SQUARE_SIZE * (SQUARE_COUNT - square))) & SQUARE_FIRST_BYTE)
+#define SET_SQUARE_COLOR(face, square, color) (face |= (color << (SQUARE_SIZE * (SQUARE_COUNT - square)))) 
+#define ROTATE_RIGHT(face) ((face >> (SQUARE_SIZE * 2)) | (face << (SQUARE_SIZE * 6)))
+#define ROTATE_LEFT(face) ((face << (SQUARE_SIZE * 2)) | (face >> (SQUARE_SIZE * 6)))
 
 extern bool debug_enabled;
 extern bool use_terminal_colors;
@@ -44,11 +48,12 @@ extern const char LEGAL_COLORS[];
 uint_64 COLOR_VALUES [100];
 char CHAR_VALUES[SIDES];
 char FACE_CHARS[SIDES];
-char * COLOR_NAMES[];
-char * COLOR_CODES[10];
+char * COLOR_NAMES[SIDES];
+char * COLOR_CODES[SIDES];
 
 extern const uint_64 ADJACENT_SIDES[SIDES][4];
 extern const int ADJACENT_SQUARES[SIDES][4][3];
+uint_64 SQUARE_MASKS[SQUARE_COUNT+1];
 
 extern const int CUBE_REPRESENTATION_LENGTH;
 

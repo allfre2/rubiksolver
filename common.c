@@ -123,6 +123,13 @@ void Init() {
     SquareRepresentationPattern[2][0] = 7;
     SquareRepresentationPattern[2][1] = 6;
     SquareRepresentationPattern[2][2] = 5;
+
+    for (int sq = 1; sq < SQUARE_COUNT+1; ++sq) {
+        SQUARE_MASKS [ sq ] = ~ (SQUARE_FIRST_BYTE << (SQUARE_SIZE * (SQUARE_COUNT - sq)));
+        if (debug_enabled) {
+            printf("\n%016llx\n", SQUARE_MASKS [sq]);
+        }
+    }
 }
 
 const uint_64 ADJACENT_SIDES[SIDES][4] = {
