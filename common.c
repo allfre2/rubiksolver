@@ -153,7 +153,7 @@ void Init() {
     for (int sq = 1; sq < FACE_SQUARE_COUNT+1; ++sq) {
         FACE_SQUARE_MASKS [ sq ] = ~ (SQUARE_FIRST_BYTE << (SQUARE_SIZE * (FACE_SQUARE_COUNT - sq)));
         if (debug_enabled) {
-            printf("\n%016llx\n", FACE_SQUARE_MASKS [sq]);
+            //printf("\n%016llx\n", FACE_SQUARE_MASKS [sq]);
         }
     }
 }
@@ -259,7 +259,7 @@ char * GetCubeString(Cube * cube) {
 
     for (int i = 0; i < SIDES; ++i) {
         for (int square = 1; square <= 8; ++square) {
-            unsigned char color = SQUARE_COLOR(cube -> Faces [ ORDER [ i ] ], square);
+            u_int color = SQUARE_COLOR(cube -> Faces [ ORDER [ i ] ], square);
             cubeString [ strIndex++ ] = COLOR_CHARS [ color ];
         }
     }
@@ -362,7 +362,31 @@ void Rotate(Cube * cube, u_int face, bool inverted) {
         cube -> Faces [face] = ROTATE_LEFT(cube -> Faces [face]);
     } else {
         cube -> Faces [face] = ROTATE_RIGHT(cube -> Faces [face]);
-    }    
+        RotateSides(cube, face, inverted);
+    } 
+}
+
+// Sorry for this one too
+void RotateSides(Cube * cube, u_int face, bool inverted) {
+    u_int * adjacentSides = ADJACENT_SIDES [ face ];
+
+    u_int faces[SIDES];
+    memcpy(faces, cube -> Faces, sizeof(u_int) * SIDES);
+
+    for (int side = 0; side < 4; ++side) {
+        int destination = (side == 3) ? 0 : side + 1;
+
+        int * sourceSquares = ADJACENT_SQUARES[face][side];
+        int * destinationSquares = ADJACENT_SQUARES[face][destination];
+
+        for (int square = 0; square < 3; ++square) {
+            u_int color = SQUARE_COLOR(faces [ adjacentSides [ side ] ], sourceSquares [square]);
+            UPDATE_SQUARE_COLOR(
+                cube -> Faces [ adjacentSides [destination] ],
+                destinationSquares [square],
+                color);
+        }
+    }
 }
 
 void DisposeCube(Cube * cube) {

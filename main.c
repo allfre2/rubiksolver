@@ -6,6 +6,7 @@ int main(int argc, char const *argv[])
 
     Init();
 
+    // TODO: Do some decent argument parsing
     if (argc < 2 || !IsValidCubeString(argv[1])) {
         PrintInvalidRepresentationMessage();
         exit(1);
@@ -20,11 +21,8 @@ int main(int argc, char const *argv[])
     PrintCubeRepresentation(&cube);
 
     printf("%s\n\n", representation);
-
-    Rotate(&cube, FRONT, false);
-    PrintCubeRepresentation(&cube);
-
     free(representation);
+
     DisposeCube(&cube);
     return 0;
 }
