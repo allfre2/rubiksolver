@@ -1,8 +1,10 @@
 # UniSolver (3x3 Rubik's Cube)
 
-In Progress ...
+Rubik's Cube 3x3 scrambler and solver.
 
-Rubik's Cube 3x3 scrambler, solver and timer.
+Stress relief for some days.
+
+In Progress ...
 
 ## Build
 

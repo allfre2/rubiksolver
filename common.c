@@ -51,11 +51,12 @@ const char SOLVED_POSITION[] = {
     YELLOW_CHAR,YELLOW_CHAR,YELLOW_CHAR,YELLOW_CHAR,YELLOW_CHAR,YELLOW_CHAR,YELLOW_CHAR,YELLOW_CHAR,
     WHITE_CHAR,WHITE_CHAR,WHITE_CHAR,WHITE_CHAR,WHITE_CHAR,WHITE_CHAR,WHITE_CHAR,WHITE_CHAR,
     0
-}; //"BBBBBBBBRRRRRRRRGGGGGGGGOOOOOOOOYYYYYYYYWWWWWWWW";
+};
 
-const char * LEGAL_MOVES = {
+const char LEGAL_MOVES[] = {
     DOWN_CHAR, RIGHT_CHAR, FRONT_CHAR, LEFT_CHAR, BACK_CHAR, UP_CHAR,
-    DOWN_PRIME_CHAR, RIGHT_PRIME_CHAR, FRONT_PRIME_CHAR, LEFT_PRIME_CHAR, BACK_PRIME_CHAR, UP_PRIME_CHAR
+    DOWN_PRIME_CHAR, RIGHT_PRIME_CHAR, FRONT_PRIME_CHAR, LEFT_PRIME_CHAR, BACK_PRIME_CHAR, UP_PRIME_CHAR,
+    0
 };
 
 const char LEGAL_COLORS[] = {
@@ -87,6 +88,21 @@ int Strlen(char * str) {
     }
 
     return i;
+}
+
+bool StrCmp(char * a, char * b) {
+    while (*a && *a == *b) {
+        ++a;
+        ++b;
+    }
+
+    if (*a == *b) return true;
+
+    return false;
+}
+
+bool IsLower(char * c) {
+    return c >= 'a' && c <= 'z';
 }
 
 void Init() {
@@ -122,8 +138,9 @@ void Init() {
     COLOR_CODES[GREEN]  = "\e[0;102m";
     COLOR_CODES[RED]    = "\e[0;101m";
     COLOR_CODES[BLUE]   = "\e[0;104m";
-    COLOR_CODES[ORANGE] = "\e[45m";
+    COLOR_CODES[ORANGE] = "\e[0m";
     COLOR_CODES[YELLOW] = "\e[43m";
+    RESET_COLOR_CODE = "\e[0m";
 
     RepresentationPattern[0][0] = EMPTY_FACE;
     RepresentationPattern[0][1] = UP;
@@ -156,6 +173,19 @@ void Init() {
             //printf("\n%016llx\n", FACE_SQUARE_MASKS [sq]);
         }
     }
+
+    MOVE_FACES [ DOWN_CHAR ]        = DOWN;
+    MOVE_FACES [ RIGHT_CHAR ]       = RIGHT;
+    MOVE_FACES [ FRONT_CHAR ]       = FRONT;
+    MOVE_FACES [ LEFT_CHAR ]        = LEFT;
+    MOVE_FACES [ BACK_CHAR ]        = BACK;
+    MOVE_FACES [ UP_CHAR ]          = UP;
+    MOVE_FACES [ DOWN_PRIME_CHAR ]  = DOWN;
+    MOVE_FACES [ RIGHT_PRIME_CHAR ] = RIGHT;
+    MOVE_FACES [ FRONT_PRIME_CHAR ] = FRONT;
+    MOVE_FACES [ LEFT_PRIME_CHAR ]  = LEFT;
+    MOVE_FACES [ BACK_PRIME_CHAR ]  = BACK;
+    MOVE_FACES [ UP_PRIME_CHAR ]    = UP;
 }
 
 const u_int ADJACENT_SIDES[SIDES][4] = {
@@ -164,7 +194,7 @@ const u_int ADJACENT_SIDES[SIDES][4] = {
     { UP, RIGHT, DOWN, LEFT },    // FRONT
     { UP, FRONT, DOWN, BACK },    // LEFT
     { UP, LEFT, DOWN, RIGHT },    // BACK
-    { BACK, RIGHT, FRONT, LEFT} , // TOP
+    { BACK, RIGHT, FRONT, LEFT} , // UP
 };
 
 const int ADJACENT_SQUARES[SIDES][4][3] = {
@@ -184,7 +214,7 @@ const int ADJACENT_SQUARES[SIDES][4][3] = {
         {3,2,1}, {1,8,7}, {7,6,5}, {5,4,3}   // BACK
     },
     {
-        {3,2,1}, {1,2,3}, {3,2,1}, {3,2,1}   // TOP
+        {3,2,1}, {3,2,1}, {3,2,1}, {3,2,1}   // UP
     },
 };
 
@@ -193,6 +223,17 @@ bool IsLegalChar(char c) {
 
     while (i < SIDES) {
         if (LEGAL_COLORS[i] == c) return true;
+        ++i;
+    }
+
+    return false;
+}
+
+bool IsLegalMove(char c) {
+    int i = 0;
+
+    while (i < (SIDES*2)) {
+        if (LEGAL_MOVES[i] == c) return true;
         ++i;
     }
 
@@ -208,6 +249,15 @@ bool IsValidCubeString(char * string) {
     while (string[i]) {
         if (!IsLegalChar(string[i])) return false;
         ++i;
+    }
+
+    return true;
+}
+
+bool IsValidMoveString(char * str) {
+    while(*str) {
+        if (!IsLegalMove(*str)) return false;
+        ++str;
     }
 
     return true;
@@ -232,23 +282,13 @@ void ParseCube(char * position, Cube * cube) {
             color
         );
 
-        face = (square == 8) ? (face + 1) : face;
-        square = (square == 8) ? 1 : square + 1;
+        face = (square == FACE_SQUARE_COUNT) ? (face + 1) : face;
+        square = (square == FACE_SQUARE_COUNT) ? 1 : square + 1;
         ++i;
     }
 
     return cube;
 }
-
-/*
-
-Binary Representation of a face
-Squares in the cube go from top left corner (Most Significant Byte) clockwise
-
-7        6        5        4        3        2        1        0
-00000000 00000001 00000010 00000011 00000100 00000101 00000000 00000001
-
-*/
 
 char * GetCubeString(Cube * cube) {
     
@@ -269,11 +309,12 @@ char * GetCubeString(Cube * cube) {
 
 void PrintColorNames() {
     for (int i = 0; i < SIDES; ++i) {
-        printf("%s: %c %s%c\e[0m\n",
+        printf("%s: %c %s%c%s\n",
             COLOR_NAMES [ ORDER [ i ] ],
             COLOR_CHARS [ ORDER [ i ] ],
             use_terminal_colors ?  COLOR_CODES [ ORDER [ i ] ] : "",
-            ' ');
+            ' ',
+            RESET_COLOR_CODE);
     }
 }
 
@@ -285,7 +326,12 @@ void PrintFaceOrder() {
     }
 }
 
-void PrintFaceRow(Cube * cube, u_int face, int square1, int square2, int square3) {
+void PrintFaceRow(Cube * cube, u_int face, int face_row) {
+
+    int
+        square1 = SquareRepresentationPattern[face_row][0],
+        square2 = SquareRepresentationPattern[face_row][1],
+        square3 = SquareRepresentationPattern[face_row][2];
 
     u_int 
         color1 = SQUARE_COLOR( cube -> Faces [face], square1 ),
@@ -304,10 +350,10 @@ void PrintFaceRow(Cube * cube, u_int face, int square1, int square2, int square3
 
     if (use_terminal_colors)
     {
-        printf("%s%c", code1, '.');
-        printf("%s%c", code2, (square2 == CENTER_SQUARE) ? char2 : '.');
-        printf("%s%c", code3, '.');
-        printf("\e[0m");
+        printf("%s%c", code1, EMPTY_SQUARE_CHAR);
+        printf("%s%c", code2, (square2 == CENTER_SQUARE) ? char2 : EMPTY_SQUARE_CHAR);
+        printf("%s%c", code3, EMPTY_SQUARE_CHAR);
+        printf("%s", RESET_COLOR_CODE);
     } else {
         printf("%c%c%c", char1, char2, char3);
     }
@@ -323,18 +369,12 @@ void PrintCubeRepresentation(Cube * cube) {
 
                 u_int face = RepresentationPattern[row][column];
 
-                int square1, square2, square3;
-
                 if (face == EMPTY_FACE) {
                     printf("    ");
                     continue;
                 }
 
-                square1 = SquareRepresentationPattern[face_row][0];
-                square2 = SquareRepresentationPattern[face_row][1];
-                square3 = SquareRepresentationPattern[face_row][2];
-
-                PrintFaceRow(cube, face, square1, square2, square3);
+                PrintFaceRow(cube, face, face_row);
                 printf(" ");
             }
 
@@ -347,6 +387,7 @@ void PrintCubeRepresentation(Cube * cube) {
 
 void PrintInvalidRepresentationMessage() {
         printf("\n\nYou must provide a valid cube representation string.\n\n");        
+        
         PrintColorNames();
 
         printf("\nFace Order is: ");
@@ -357,16 +398,58 @@ void PrintInvalidRepresentationMessage() {
         printf("\n\n");
 }
 
+void PrintValidMoves() {
+    for (int i = 0; i < SIDES*2; ++i) {
+        printf("%c ", LEGAL_MOVES [i]);
+    }
+}
+
+void PrintInvalidMovesMessage() {
+    printf("\n\nYou must provide valid moves.\n\n");
+
+    printf("\n Valid moves are: ");
+    PrintValidMoves();
+}
+
+char * GenerateRandomScramble(int size) {
+    
+    srand(time(0));
+    char * scramble = malloc(sizeof(char) * size + 1);
+
+    int i = 0;
+
+    while (i < size) {
+        scramble[i] = LEGAL_MOVES [rand() % (SIDES * 2)];
+        ++i;
+    }
+
+    scramble[i] = 0;
+
+    return scramble;
+}
+
+void ApplyAlgorithm(Cube * cube, char * move) {
+    while (*move) {
+        Move(cube, *move);
+        ++move;
+    }
+}
+
+void Move(Cube * cube, char move) {
+    Rotate(cube, MOVE_FACES [ move ], IsLower(move));
+}
+
 void Rotate(Cube * cube, u_int face, bool inverted) {
+
     if (inverted) {
         cube -> Faces [face] = ROTATE_LEFT(cube -> Faces [face]);
     } else {
         cube -> Faces [face] = ROTATE_RIGHT(cube -> Faces [face]);
-    } 
+    }
+
     RotateSides(cube, face, inverted);
 }
 
-// Sorry for this one too
 void RotateSides(Cube * cube, u_int face, bool inverted) {
     u_int * adjacentSides = ADJACENT_SIDES [ face ];
 
@@ -383,7 +466,6 @@ void RotateSides(Cube * cube, u_int face, bool inverted) {
             int destination = (side == 3) ? 0 : side + 1;
             RotateSquares(cube, &faces, face, side, destination);
         }
-
     }
 }
 
@@ -394,13 +476,13 @@ void RotateSquares(Cube * cube, u_int * faces, u_int face, int source, int desti
         int * sourceSquares = ADJACENT_SQUARES[face][source];
         int * destinationSquares = ADJACENT_SQUARES[face][destination];
 
-        for (int square = 0; square < 3; ++square) {
+        for (int n = 0; n < 3; ++n) {
 
-            u_int color = SQUARE_COLOR(faces [ adjacentSides [ source ] ], sourceSquares [square]);
+            u_int color = SQUARE_COLOR(faces [ adjacentSides [ source ] ], sourceSquares [n]);
 
             UPDATE_SQUARE_COLOR(
                 cube -> Faces [ adjacentSides [destination] ],
-                destinationSquares [square],
+                destinationSquares [n],
                 color);
         }
 }
@@ -408,4 +490,8 @@ void RotateSquares(Cube * cube, u_int * faces, u_int face, int source, int desti
 
 void DisposeCube(Cube * cube) {
     free(cube -> Faces);
+}
+
+void OutputHelpText() {
+    printf("\nHelp text goes here ...\n");
 }

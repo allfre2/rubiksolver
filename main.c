@@ -6,23 +6,79 @@ int main(int argc, char const *argv[])
 
     Init();
 
-    // TODO: Do some decent argument parsing
-    if (argc < 2 || !IsValidCubeString(argv[1])) {
-        PrintInvalidRepresentationMessage();
-        exit(1);
+    if (argc == 2 && StrCmp(argv[1], "-s")) {
+
+        char * scramble = GenerateRandomScramble(12);
+    
+        Cube cube;
+
+        ParseCube(SOLVED_POSITION, &cube);
+
+        ApplyAlgorithm(&cube, scramble);
+
+        PrintCubeRepresentation(&cube);
+
+        char * cubeString = GetCubeString(&cube);
+
+        printf("\nScramble: %s\n", scramble);
+        printf("Position: %s\n\n", cubeString);
+
+        free(cubeString);
+        free(scramble);
+        DisposeCube(&cube);
+
+        exit(0);
     }
 
-    Cube cube;
+    if (argc == 3) {
 
-    ParseCube(argv[1], &cube);
+        if (StrCmp(argv[1], "-s")) {
 
-    char * representation = GetCubeString(&cube);
+            if (!IsValidMoveString(argv[2])) {
+                PrintInvalidMovesMessage();
+                exit(1);
+            }
 
-    PrintCubeRepresentation(&cube);
+            Cube cube;
 
-    printf("%s\n\n", representation);
-    free(representation);
+            ParseCube(SOLVED_POSITION, &cube);
+            
+            ApplyAlgorithm(&cube, argv[2]);
 
-    DisposeCube(&cube);
-    return 0;
+            PrintCubeRepresentation(&cube);
+
+            char * cubeString = GetCubeString(&cube);
+
+            printf("Position: %s\n\n", cubeString);
+
+            free(cubeString);
+            DisposeCube(&cube);
+
+            exit(0);
+
+        } else if (StrCmp(argv[1], "-p")) {
+
+            if (!IsValidCubeString(argv[2])) {
+                PrintInvalidRepresentationMessage();
+                exit(1);
+            }
+
+            Cube cube;
+            ParseCube(argv[2], &cube);
+
+            char * cubeString = GetCubeString(&cube);
+
+            PrintCubeRepresentation(&cube);
+
+            printf("Position: %s\n\n", cubeString);
+
+            free(cubeString);
+            DisposeCube(&cube);
+
+            exit(0);
+        }
+    }
+
+    OutputHelpText();
+    exit(1);
 }

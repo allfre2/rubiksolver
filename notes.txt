@@ -1,14 +1,35 @@
-Test positions for cube representation:
+/*
 
-Scramble:
+Binary Representation of a face
+Squares in the cube go from top left corner (Most Significant Byte) clockwise
+
+7        6        5        4        3        2        1        0
+00000000 00000001 00000010 00000011 00000100 00000101 00000000 00000001
+
+*/
+
+2. Useful positions and algorithms:
+
+- Solved cube:
+    BBBBBBBBRRRRRRRRGGGGGGGGOOOOOOOOYYYYYYYYWWWWWWWW
+
+- Calibration scramble:
     U2 D2 F2 L B2 U2 F L2 B F U L B' R' F2 B2 U2 F' B' U D2 F D2 U' R2
+    Result: RRYYBBRBOGWROGWORGYOGRWWGWYYYBWWGBOYBOBGOWGYROBR
 
-Position:
-    RRYYBBRBOGWROGWORGYOGRWWGWYYYBWWGBOYBOBGOWGYROBR
+- Algorithms:
 
-TODO:
-    - Define double rotation function ?
+Single color center:
+    U d B f R l U d
+    unisolver -s UdBfRlUd
+
+Chess board pattern:
+    U U D D R R L L F F B B
+    unisolver -s UUDDRRLLFFBB
+
+- TODO:
+    - Fix Adjacency values for sides rotation
     - Optimize rotations ?
-    - Define way of performing sequence of moves on the cube
-    - Define scrambler generator
-    - That enough for a bit there ...
+    - Improve scrambler
+    - That's enough for a bit there ...
+    - Don't squeeze the Charmin

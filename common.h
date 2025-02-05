@@ -76,7 +76,7 @@ extern const char YELLOW_CHAR;
 extern const char EMPTY_SQUARE_CHAR;
 
 extern const char SOLVED_POSITION[];
-extern const char * LEGAL_MOVES;
+extern const char LEGAL_MOVES[];
 extern const char LEGAL_COLORS[];
 
 u_int COLOR_VALUES [100];
@@ -84,16 +84,23 @@ char COLOR_CHARS[SIDES];
 char FACE_CHARS[SIDES];
 char * COLOR_NAMES[SIDES];
 char * COLOR_CODES[SIDES];
+char * RESET_COLOR_CODE;
 
 extern const u_int ADJACENT_SIDES[SIDES][4];
 extern const int ADJACENT_SQUARES[SIDES][4][3];
 u_int FACE_SQUARE_MASKS[FACE_SQUARE_COUNT+1];
 
+u_int MOVE_FACES[SIDES*2];
+
 void EnableDebug(bool);
 int Strlen(char *);
+bool StrCmp(char *, char *);
+bool IsLower(char *);
 void Init();
 bool IsLegalChar(char);
+bool IsLegalMove(char);
 bool IsValidCubeString(char *);
+bool IsValidMoveString(char *);
 
 const u_int ORDER [SIDES];
 
@@ -109,7 +116,13 @@ int SquareRepresentationPattern[3][3];
 
 void PrintCubeRepresentation(Cube *);
 void PrintInvalidRepresentationMessage();
+void PrintInvalidMovesMessage();
 
+char * GenerateRandomScramble(int);
+void ApplyAlgorithm(Cube *, char *);
+void Move(Cube *, char);
 void Rotate(Cube *, u_int, bool);
 
 void DisposeCube(Cube *);
+
+void OutputHelpText();
