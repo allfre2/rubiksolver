@@ -15,6 +15,7 @@ Squares in the cube go from top left corner (Most Significant Byte) clockwise
 
 - Calibration scramble:
     U2 D2 F2 L B2 U2 F L2 B F U L B' R' F2 B2 U2 F' B' U D2 F D2 U' R2
+    UU DD FF L BB UU F LL B F U L b  r  FF BB UU f  b  U DD F DD u  RR
     Result: RRYYBBRBOGWROGWORGYOGRWWGWYYYBWWGBOYBOBGOWGYROBR
 
 - Algorithms:
@@ -28,7 +29,6 @@ Chess board pattern:
     unisolver -s UUDDRRLLFFBB
 
 - TODO:
-    - Fix Adjacency values for sides rotation
     - Optimize rotations ?
     - Improve scrambler
     - That's enough for a bit there ...
