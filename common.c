@@ -362,8 +362,8 @@ void Rotate(Cube * cube, u_int face, bool inverted) {
         cube -> Faces [face] = ROTATE_LEFT(cube -> Faces [face]);
     } else {
         cube -> Faces [face] = ROTATE_RIGHT(cube -> Faces [face]);
-        RotateSides(cube, face, inverted);
     } 
+    RotateSides(cube, face, inverted);
 }
 
 // Sorry for this one too
@@ -373,21 +373,38 @@ void RotateSides(Cube * cube, u_int face, bool inverted) {
     u_int faces[SIDES];
     memcpy(faces, cube -> Faces, sizeof(u_int) * SIDES);
 
-    for (int side = 0; side < 4; ++side) {
-        int destination = (side == 3) ? 0 : side + 1;
+    if (inverted) {
+        for (int side = 3; side > -1; --side) {
+            int destination = (side == 0) ? 3 : side - 1;
+            RotateSquares(cube, &faces, face, side, destination);
+        }
+    } else {
+        for (int side = 0; side < 4; ++side) {
+            int destination = (side == 3) ? 0 : side + 1;
+            RotateSquares(cube, &faces, face, side, destination);
+        }
 
-        int * sourceSquares = ADJACENT_SQUARES[face][side];
+    }
+}
+
+void RotateSquares(Cube * cube, u_int * faces, u_int face, int source, int destination) {
+
+        u_int * adjacentSides = ADJACENT_SIDES [ face ];
+
+        int * sourceSquares = ADJACENT_SQUARES[face][source];
         int * destinationSquares = ADJACENT_SQUARES[face][destination];
 
         for (int square = 0; square < 3; ++square) {
-            u_int color = SQUARE_COLOR(faces [ adjacentSides [ side ] ], sourceSquares [square]);
+
+            u_int color = SQUARE_COLOR(faces [ adjacentSides [ source ] ], sourceSquares [square]);
+
             UPDATE_SQUARE_COLOR(
                 cube -> Faces [ adjacentSides [destination] ],
                 destinationSquares [square],
                 color);
         }
-    }
 }
+
 
 void DisposeCube(Cube * cube) {
     free(cube -> Faces);

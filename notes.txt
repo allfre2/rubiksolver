@@ -7,4 +7,8 @@ Position:
     RRYYBBRBOGWROGWORGYOGRWWGWYYYBWWGBOYBOBGOWGYROBR
 
 TODO:
-    Define, perform and test rotations
+    - Define double rotation function ?
+    - Optimize rotations ?
+    - Define way of performing sequence of moves on the cube
+    - Define scrambler generator
+    - That enough for a bit there ...

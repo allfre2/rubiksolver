@@ -7,13 +7,14 @@ Rubik's Cube 3x3 scrambler, solver and timer.
 ## Build
 
 ```bash
-$ make
+make
 ```
 
 ## Details
 
-* Uses Bitboards to represent the cube.
-* Planning to use Friedrich method to solve the cube
+* Uses BitMaps to represent the cube.
+* Rotations are done by using bit twiddiling tricks.
+* Going to use Fridrich (CFOP) method to solve the cube.
 
 ## Screenshots
 
