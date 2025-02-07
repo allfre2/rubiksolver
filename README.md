@@ -6,7 +6,7 @@ Stress relief for some days.
 
 In Progress ...
 
-![25%](https://progress-bar.xyz/50)
+![25%](https://progress-bar.xyz/25)
 
 ## Build
 
