@@ -351,7 +351,7 @@ void PrintFaceRow(Cube * cube, u_int face, int face_row) {
     if (use_terminal_colors)
     {
         printf("%s%c", code1, EMPTY_SQUARE_CHAR);
-        printf("%s%c", code2, (square2 == CENTER_SQUARE) ? char2 : EMPTY_SQUARE_CHAR);
+        printf("%s%s%c", code2, (square2 == CENTER_SQUARE) ? char2 : EMPTY_SQUARE_CHAR);
         printf("%s%c", code3, EMPTY_SQUARE_CHAR);
         printf("%s", RESET_COLOR_CODE);
     } else {
@@ -437,7 +437,8 @@ void ApplyAlgorithm(Cube * cube, char * move) {
 }
 
 void Move(Cube * cube, char move) {
-    Rotate(cube, MOVE_FACES [ move ], IsLower(move));
+    bool inverted = IsLower(move);
+    Rotate(cube, MOVE_FACES [ move ], inverted);
 }
 
 void Rotate(Cube * cube, u_int face, bool inverted) {
@@ -487,7 +488,6 @@ void RotateSquares(Cube * cube, u_int * faces, u_int face, int source, int desti
                 color);
         }
 }
-
 
 void DisposeCube(Cube * cube) {
     free(cube -> Faces);

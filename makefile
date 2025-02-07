@@ -2,10 +2,10 @@
 CC = gcc
 CFLAGS = -std=c99 -O2 -Wall -fcommon -w
 POSIXTHREADS = -lpthread
-OBJS = main.o common.o
+OBJS = main.o common.o solver.o
 WORKINGDIR = ./bin
 OUT= $(WORKINGDIR)/unisolver
-SOURCES = main.c common.c 
+SOURCES = main.c common.c  solver.c
 RM = rm
 
 default: resetenv unisolver removebinaries

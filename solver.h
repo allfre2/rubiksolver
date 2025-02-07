@@ -13,3 +13,9 @@
 // PLL
 // 21 algorithms (3 rotations)
 // scan for 63 different positions
+
+#ifndef SOlVER_H
+    #define SOLVER_H
+#endif
+
+char * Solve(Cube *);

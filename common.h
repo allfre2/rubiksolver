@@ -1,3 +1,7 @@
+#ifndef COMMON_H
+    #define COMMON_H
+#endif
+
 //#define USE_32_BITS
 
 #define SIDES 6

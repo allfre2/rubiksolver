@@ -1,4 +1,5 @@
 #include "common.h"
+#include "solver.h"
 
 int main(int argc, char const *argv[])
 {
