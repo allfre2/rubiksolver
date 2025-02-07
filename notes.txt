@@ -1,11 +1,27 @@
 /*
 
-Binary Representation of a face
+1. Binary Representation of a face (64 bit mode)
 Squares in the cube go from top left corner (Most Significant Byte) clockwise
 
-7        6        5        4        3        2        1        0
+1        2        3        4        5        6        7        8
 00000000 00000001 00000010 00000011 00000100 00000101 00000000 00000001
+White    Green    Red      Blue     Orange   Yellow   White    Green
 
+00000000 00000001 00000010
+00000001  center  00000011
+00000000 00000101 00000100
+
+   >        >        V    
+   ^        .        V
+   ^        <        <
+
+ White    Green     Red     
+ Green    [    ]    Blue
+ White    Yellow    Orange
+
+Notation: WGRBOYWG
+
+Thanks to: https://stackoverflow.com/questions/500221/how-would-you-represent-a-rubiks-cube-in-code
 */
 
 2. Useful positions and algorithms:
@@ -29,7 +45,20 @@ Chess board pattern:
     unisolver -s UUDDRRLLFFBB
 
 - TODO:
+    - Define ways of scanning the cube for pieces, colors
+      and patterns or positions of the cube.
+      Keep in mind that you only have 1.5k of memory and 10k of storage
+    - Define way of performing algorithms and pattern scans with the cube rotated
+    - Define scanning patterns and algorithms for Cross
+      (1 or 2 weekends)
+
     - Optimize rotations ?
-    - Improve scrambler
+    - Improve scrambler ?
     - That's enough for a bit there ...
     - Don't squeeze the Charmin
+
+    - Define scanning patterns and algorithms for F2L (1 or 2 weekends)
+    - Define scanning patterns and algorithms for OLL (1 to 3 weekends)
+    - Define scanning patterns and algorithms for PLL (1 to 3 weekends)
+
+    cube is solved ...

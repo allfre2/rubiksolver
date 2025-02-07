@@ -409,6 +409,7 @@ void PrintInvalidMovesMessage() {
 
     printf("\n Valid moves are: ");
     PrintValidMoves();
+    printf("\n\n");
 }
 
 char * GenerateRandomScramble(int size) {
@@ -493,5 +494,11 @@ void DisposeCube(Cube * cube) {
 }
 
 void OutputHelpText() {
-    printf("\nHelp text goes here ...\n");
+    printf("\nunisolver\n");
+
+    printf("\n\t-s => Generates a scramble.\n");
+    printf("\n\t-s [algorithm/moves] => Performs the second argument's moves on the cube, outputs solution.\n");
+    printf("\n\t-p [position string] =>");
+    printf(" Sets the second argument's position on the cube, outputs solution.\n");
+    printf("\n");
 }
