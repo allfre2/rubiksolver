@@ -11,9 +11,9 @@ int main(int argc, char const *argv[])
 
         Cube cube;
 
-        ParseCube(SOLVED_POSITION, &cube);
+        InitCube(&cube);
     
-        GenerateRandomScramble(&cube);
+        Scramble(&cube);
 
         PrintCubeRepresentation(&cube);
 
@@ -22,14 +22,13 @@ int main(int argc, char const *argv[])
         printf("\nScramble: %s\n", cube.Scramble);
         printf("Position: %s\n\n", cubeString);
 
-        free(cubeString);
-
         Solve(&cube);
 
         PrintCubeRepresentation(&cube);
 
-        printf("\n Solution (Cross only): %s\n\n", cube.Solution);
+        printf("\nSolution (Cross only): %s\n\n", cube.Solution);
 
+        free(cubeString);
         DisposeCube(&cube);
         exit(0);
     }
@@ -45,7 +44,7 @@ int main(int argc, char const *argv[])
 
             Cube cube;
 
-            ParseCube(SOLVED_POSITION, &cube);
+            InitCube(&cube);
             
             ApplyAlgorithm(&cube, argv[2]);
 

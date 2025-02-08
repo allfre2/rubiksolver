@@ -269,6 +269,11 @@ bool IsValidMoveString(char * str) {
     return true;
 }
 
+void InitCube(Cube * cube) {
+    ParseCube(SOLVED_POSITION, cube);
+    cube -> Solved = true;
+}
+
 void ParseCube(char * position, Cube * cube) {
 
     cube -> Faces = malloc(sizeof(u_int) * SIDES);
@@ -282,6 +287,7 @@ void ParseCube(char * position, Cube * cube) {
 
     cube -> scrambleIndex = 0;
     cube -> solutionIndex = 0;
+    cube -> Scrambling = false;
     cube -> Solving = false;
 
     int i = 0;
@@ -428,16 +434,20 @@ void PrintInvalidMovesMessage() {
     printf("\n\n");
 }
 
-void GenerateRandomScramble(Cube * cube) {
+void Scramble(Cube * cube) {
     
-    int size = MAXIMUM_SCRAMBLE_LENGTH;
-    srand(time(0));
+    cube -> Solved = false;
+    cube -> Scrambling = true;
 
+    srand(time(0));
+    int size = MAXIMUM_SCRAMBLE_LENGTH;
     int i = 0;
 
     while (i++ < size) {
         Move(cube, LEGAL_MOVES [rand() % (SIDES * 2)]);
     }
+
+    cube -> Scrambling = false;
 }
 
 void ApplyAlgorithm(Cube * cube, char * move) {
@@ -450,14 +460,16 @@ void ApplyAlgorithm(Cube * cube, char * move) {
 void Move(Cube * cube, char move) {
     if (cube -> Solving) {
         if (cube -> solutionIndex == MAXIMUM_SOLUTION_LENGTH) {
-            printf("\n(!) Solution buffer filled!\n");
+            printf("\n(!) Solution buffer is full!\n");
             return; //TODO: handle error
         }
         cube -> Solution [cube -> solutionIndex] = move;
         cube -> solutionIndex++;
-    } else {
+    }
+    
+    if (cube -> Scrambling) {
         if (cube -> scrambleIndex == MAXIMUM_SCRAMBLE_LENGTH) {
-            printf("\n(!) Scramble buffer filled!\n");
+            printf("\n(!) Scramble buffer is full!\n");
             return; // Same
         }
         cube -> Scramble [cube -> scrambleIndex] = move;

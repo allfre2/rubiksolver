@@ -123,9 +123,12 @@ typedef struct {
     char * Solution;
     int scrambleIndex;
     int solutionIndex;
+    bool Scrambling;
     bool Solving;
+    bool Solved;
 } Cube;
 
+void InitCube(Cube *);
 void ParseCube(char *, Cube *);
 char * GetCubeString(Cube *);
 
@@ -136,7 +139,7 @@ void PrintCubeRepresentation(Cube *);
 void PrintInvalidRepresentationMessage();
 void PrintInvalidMovesMessage();
 
-void GenerateRandomScramble(Cube *);
+void Scramble(Cube *);
 void ApplyAlgorithm(Cube *, char *);
 void Move(Cube *, char);
 void Rotate(Cube *, u_int, bool);
