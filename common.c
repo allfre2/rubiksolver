@@ -15,33 +15,12 @@ const u_int LEFT  = 0x03;
 const u_int BACK  = 0x04;
 const u_int UP    = 0x05;
 
-const char DOWN_CHAR        = 'D';
-const char RIGHT_CHAR       = 'R';
-const char FRONT_CHAR       = 'F';
-const char LEFT_CHAR        = 'L';
-const char BACK_CHAR        = 'B';
-const char UP_CHAR          = 'U';
-const char DOWN_PRIME_CHAR  = 'd';
-const char RIGHT_PRIME_CHAR = 'r';
-const char FRONT_PRIME_CHAR = 'f';
-const char LEFT_PRIME_CHAR  = 'l';
-const char BACK_PRIME_CHAR  = 'b';
-const char UP_PRIME_CHAR    = 'u';
-
 const u_int WHITE  = DOWN;
 const u_int GREEN  = RIGHT;
 const u_int RED    = FRONT;
 const u_int BLUE   = LEFT;
 const u_int ORANGE = BACK;
 const u_int YELLOW = UP;
-
-const char WHITE_CHAR  = 'W';
-const char GREEN_CHAR  = 'G';
-const char RED_CHAR    = 'R';
-const char BLUE_CHAR   = 'B';
-const char ORANGE_CHAR = 'O';
-const char YELLOW_CHAR = 'Y';
-const char EMPTY_SQUARE_CHAR = '.';
 
 const char SOLVED_POSITION[] = {
     BLUE_CHAR,BLUE_CHAR,BLUE_CHAR,BLUE_CHAR,BLUE_CHAR,BLUE_CHAR,BLUE_CHAR,BLUE_CHAR,

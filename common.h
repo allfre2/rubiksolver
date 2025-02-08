@@ -53,18 +53,18 @@ extern const u_int LEFT;
 extern const u_int BACK;
 extern const u_int UP;
 
-extern const char DOWN_CHAR;
-extern const char RIGHT_CHAR;
-extern const char FRONT_CHAR;
-extern const char LEFT_CHAR;
-extern const char BACK_CHAR;
-extern const char UP_CHAR;
-extern const char DOWN_PRIME_CHAR;
-extern const char RIGHT_PRIME_CHAR;
-extern const char FRONT_PRIME_CHAR;
-extern const char LEFT_PRIME_CHAR;
-extern const char BACK_PRIME_CHAR;
-extern const char UP_PRIME_CHAR;
+#define DOWN_CHAR 'D'
+#define RIGHT_CHAR 'R'
+#define FRONT_CHAR 'F'
+#define LEFT_CHAR 'L'
+#define BACK_CHAR 'B'
+#define UP_CHAR 'U'
+#define DOWN_PRIME_CHAR 'd'
+#define RIGHT_PRIME_CHAR 'r'
+#define FRONT_PRIME_CHAR 'f'
+#define LEFT_PRIME_CHAR 'l'
+#define BACK_PRIME_CHAR 'b'
+#define UP_PRIME_CHAR 'u'
 
 extern const u_int WHITE;
 extern const u_int GREEN;
@@ -73,13 +73,13 @@ extern const u_int BLUE;
 extern const u_int ORANGE;
 extern const u_int YELLOW;
 
-extern const char WHITE_CHAR;
-extern const char GREEN_CHAR;
-extern const char RED_CHAR;
-extern const char BLUE_CHAR;
-extern const char ORANGE_CHAR;
-extern const char YELLOW_CHAR;
-extern const char EMPTY_SQUARE_CHAR;
+#define WHITE_CHAR 'W'
+#define GREEN_CHAR 'G'
+#define RED_CHAR 'R'
+#define BLUE_CHAR 'B'
+#define ORANGE_CHAR 'O'
+#define YELLOW_CHAR 'Y'
+#define EMPTY_SQUARE_CHAR '.'
 
 extern const char SOLVED_POSITION[];
 extern const char LEGAL_MOVES[];
