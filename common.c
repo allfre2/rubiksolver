@@ -33,8 +33,8 @@ const char SOLVED_POSITION[] = {
 };
 
 const char LEGAL_MOVES[] = {
-    DOWN_CHAR, RIGHT_CHAR, FRONT_CHAR, LEFT_CHAR, BACK_CHAR, UP_CHAR,
-    DOWN_PRIME_CHAR, RIGHT_PRIME_CHAR, FRONT_PRIME_CHAR, LEFT_PRIME_CHAR, BACK_PRIME_CHAR, UP_PRIME_CHAR,
+    _DOWN, _RIGHT, _FRONT, _LEFT, _BACK, _UP,
+    _DOWN_I, _RIGHT_I, _FRONT_I, _LEFT_I, _BACK_I, _UP_I,
     0
 };
 
@@ -85,13 +85,6 @@ bool IsLower(char * c) {
 }
 
 void Init() {
-    COLOR_VALUES[WHITE_CHAR]  = WHITE;
-    COLOR_VALUES[GREEN_CHAR]  = GREEN;
-    COLOR_VALUES[RED_CHAR]    = RED;
-    COLOR_VALUES[BLUE_CHAR]   = BLUE;
-    COLOR_VALUES[ORANGE_CHAR] = ORANGE;
-    COLOR_VALUES[YELLOW_CHAR] = YELLOW;
-
     COLOR_CHARS[WHITE]  = WHITE_CHAR;
     COLOR_CHARS[GREEN]  = GREEN_CHAR;
     COLOR_CHARS[RED]    = RED_CHAR;
@@ -153,18 +146,18 @@ void Init() {
         }
     }
 
-    MOVE_FACES [ DOWN_CHAR ]        = DOWN;
-    MOVE_FACES [ RIGHT_CHAR ]       = RIGHT;
-    MOVE_FACES [ FRONT_CHAR ]       = FRONT;
-    MOVE_FACES [ LEFT_CHAR ]        = LEFT;
-    MOVE_FACES [ BACK_CHAR ]        = BACK;
-    MOVE_FACES [ UP_CHAR ]          = UP;
-    MOVE_FACES [ DOWN_PRIME_CHAR ]  = DOWN;
-    MOVE_FACES [ RIGHT_PRIME_CHAR ] = RIGHT;
-    MOVE_FACES [ FRONT_PRIME_CHAR ] = FRONT;
-    MOVE_FACES [ LEFT_PRIME_CHAR ]  = LEFT;
-    MOVE_FACES [ BACK_PRIME_CHAR ]  = BACK;
-    MOVE_FACES [ UP_PRIME_CHAR ]    = UP;
+    MOVE_FACES [ _DOWN ]        = DOWN;
+    MOVE_FACES [ _RIGHT ]       = RIGHT;
+    MOVE_FACES [ _FRONT ]       = FRONT;
+    MOVE_FACES [ _LEFT ]        = LEFT;
+    MOVE_FACES [ _BACK ]        = BACK;
+    MOVE_FACES [ _UP ]          = UP;
+    MOVE_FACES [ _DOWN_I ]  = DOWN;
+    MOVE_FACES [ _RIGHT_I ] = RIGHT;
+    MOVE_FACES [ _FRONT_I ] = FRONT;
+    MOVE_FACES [ _LEFT_I ]  = LEFT;
+    MOVE_FACES [ _BACK_I ]  = BACK;
+    MOVE_FACES [ _UP_I ]    = UP;
 }
 
 const u_int ADJACENT_SIDES[SIDES][4] = {
@@ -269,6 +262,29 @@ bool IsValidMoveString(char * str) {
     return true;
 }
 
+u_int GetColorValue(char color_char) {
+    switch (color_char) {
+        case WHITE_CHAR:
+            return WHITE;
+        break;
+        case GREEN_CHAR:
+            return GREEN;
+        break;
+        case RED_CHAR:
+            return RED;
+        break;
+        case BLUE_CHAR:
+            return BLUE;
+        break;
+        case ORANGE_CHAR:
+            return ORANGE;
+        break;
+        case YELLOW_CHAR:
+            return YELLOW;
+        break;
+    }
+}
+
 void InitCube(Cube * cube) {
     ParseCube(SOLVED_POSITION, cube);
     cube -> Solved = true;
@@ -296,7 +312,7 @@ void ParseCube(char * position, Cube * cube) {
 
     while (position[i]) {
 
-        u_int color = COLOR_VALUES [ position [i] ];
+        u_int color = GetColorValue ( position [i] );
 
         SET_SQUARE_COLOR(
             cube -> Faces [ ORDER [ face ] ],

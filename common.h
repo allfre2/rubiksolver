@@ -61,18 +61,18 @@ extern const u_int LEFT;
 extern const u_int BACK;
 extern const u_int UP;
 
-#define DOWN_CHAR 'D'
-#define RIGHT_CHAR 'R'
-#define FRONT_CHAR 'F'
-#define LEFT_CHAR 'L'
-#define BACK_CHAR 'B'
-#define UP_CHAR 'U'
-#define DOWN_PRIME_CHAR 'd'
-#define RIGHT_PRIME_CHAR 'r'
-#define FRONT_PRIME_CHAR 'f'
-#define LEFT_PRIME_CHAR 'l'
-#define BACK_PRIME_CHAR 'b'
-#define UP_PRIME_CHAR 'u'
+#define _DOWN 'D'
+#define _RIGHT 'R'
+#define _FRONT 'F'
+#define _LEFT 'L'
+#define _BACK 'B'
+#define _UP 'U'
+#define _DOWN_I 'd'
+#define _RIGHT_I 'r'
+#define _FRONT_I 'f'
+#define _LEFT_I 'l'
+#define _BACK_I 'b'
+#define _UP_I 'u'
 
 extern const u_int WHITE;
 extern const u_int GREEN;
@@ -93,7 +93,6 @@ extern const char SOLVED_POSITION[];
 extern const char LEGAL_MOVES[];
 extern const char LEGAL_COLORS[];
 
-u_int COLOR_VALUES [100];
 char COLOR_CHARS[SIDES];
 char FACE_CHARS[SIDES];
 char * COLOR_NAMES[SIDES];
@@ -105,8 +104,6 @@ extern const int ADJACENT_SQUARES[SIDES][4][3];
 u_int FACE_SQUARE_MASKS[FACE_SQUARE_COUNT+1];
 
 u_int MOVE_FACES[SIDES*2];
-
-// Edge/Cross constants
 
 #define EDGE_COUNT 12
 #define EDGE_ORIENTATIONS 2
@@ -122,6 +119,7 @@ bool IsLegalChar(char);
 bool IsLegalMove(char);
 bool IsValidCubeString(char *);
 bool IsValidMoveString(char *);
+u_int GetColorValue(char);
 
 const u_int ORDER [SIDES];
 

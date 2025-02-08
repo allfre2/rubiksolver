@@ -1,33 +1,33 @@
 #include "common.h"
 #include "solver.h"
 
-const char MOVE_DOWN = DOWN_CHAR;
+const char MOVE_DOWN = _DOWN;
 
 const char CROSS_EDGE_ALGORITHMS[ EDGE_COUNT * EDGE_ORIENTATIONS ][8] = {
     {},
-    { DOWN_CHAR, RIGHT_CHAR, DOWN_PRIME_CHAR, FRONT_CHAR },
-    { DOWN_PRIME_CHAR, FRONT_PRIME_CHAR, DOWN_CHAR, FRONT_CHAR },
-    { RIGHT_CHAR, FRONT_CHAR }, 
-    { BACK_CHAR, BACK_CHAR, UP_CHAR, UP_CHAR, FRONT_CHAR, FRONT_CHAR },
-    { DOWN_PRIME_CHAR, RIGHT_CHAR, DOWN_CHAR, FRONT_CHAR },
-    { DOWN_CHAR, FRONT_CHAR, DOWN_PRIME_CHAR, FRONT_PRIME_CHAR },
-    { LEFT_PRIME_CHAR, FRONT_PRIME_CHAR },
-    { DOWN_PRIME_CHAR, LEFT_CHAR, DOWN_CHAR },
-    { FRONT_PRIME_CHAR },
-    { UP_CHAR, LEFT_CHAR, FRONT_PRIME_CHAR, LEFT_PRIME_CHAR }, 
-    { FRONT_CHAR, FRONT_CHAR },
-    { RIGHT_CHAR, UP_CHAR, RIGHT_PRIME_CHAR, FRONT_CHAR, FRONT_CHAR },
-    { FRONT_CHAR }, 
-    { RIGHT_PRIME_CHAR, UP_CHAR, RIGHT_CHAR, FRONT_CHAR, FRONT_CHAR },
-    { RIGHT_CHAR, RIGHT_CHAR, FRONT_CHAR, RIGHT_CHAR, RIGHT_CHAR },
-    { LEFT_CHAR, UP_PRIME_CHAR, LEFT_PRIME_CHAR, FRONT_CHAR, FRONT_CHAR },
-    { LEFT_CHAR, LEFT_CHAR, FRONT_PRIME_CHAR, LEFT_CHAR, LEFT_CHAR },
-    { UP_PRIME_CHAR, FRONT_CHAR, FRONT_CHAR },
-    { LEFT_CHAR, FRONT_PRIME_CHAR, LEFT_PRIME_CHAR },
-    { UP_CHAR, UP_CHAR, FRONT_CHAR, FRONT_CHAR },
-    { UP_CHAR, RIGHT_PRIME_CHAR, FRONT_CHAR, RIGHT_CHAR },
-    { UP_CHAR, FRONT_CHAR, FRONT_CHAR },
-    { RIGHT_PRIME_CHAR, FRONT_CHAR, RIGHT_CHAR }
+    { _DOWN, _RIGHT, _DOWN_I, _FRONT },
+    { _DOWN_I, _FRONT_I, _DOWN, _FRONT },
+    { _RIGHT, _FRONT }, 
+    { _BACK, _BACK, _UP, _UP, _FRONT, _FRONT },
+    { _DOWN_I, _RIGHT, _DOWN, _FRONT },
+    { _DOWN, _FRONT, _DOWN_I, _FRONT_I },
+    { _LEFT_I, _FRONT_I },
+    { _DOWN_I, _LEFT, _DOWN },
+    { _FRONT_I },
+    { _UP, _LEFT, _FRONT_I, _LEFT_I }, 
+    { _FRONT, _FRONT },
+    { _RIGHT, _UP, _RIGHT_I, _FRONT, _FRONT },
+    { _FRONT }, 
+    { _RIGHT_I, _UP, _RIGHT, _FRONT, _FRONT },
+    { _RIGHT, _RIGHT, _FRONT, _RIGHT, _RIGHT },
+    { _LEFT, _UP_I, _LEFT_I, _FRONT, _FRONT },
+    { _LEFT, _LEFT, _FRONT_I, _LEFT, _LEFT },
+    { _UP_I, _FRONT, _FRONT },
+    { _LEFT, _FRONT_I, _LEFT_I },
+    { _UP, _UP, _FRONT, _FRONT },
+    { _UP, _RIGHT_I, _FRONT, _RIGHT },
+    { _UP, _FRONT, _FRONT },
+    { _RIGHT_I, _FRONT, _RIGHT }
 };
 
 int LookupCrossEdgeAlgorithm(Cube * cube, u_int face1, u_int face2) {
@@ -59,13 +59,13 @@ void SolveEdge(Cube * cube, u_int face1, u_int face2) {
 
 void SolveCross(Cube * cube) {
     SolveEdge(cube, DOWN, FRONT);
-    Move(cube, DOWN_CHAR);
+    Move(cube, _DOWN);
     SolveEdge(cube, DOWN, LEFT);
-    Move(cube, DOWN_CHAR);
+    Move(cube, _DOWN);
     SolveEdge(cube, DOWN, BACK);
-    Move(cube, DOWN_CHAR);
+    Move(cube, _DOWN);
     SolveEdge(cube, DOWN, RIGHT);
-    Move(cube, DOWN_CHAR);
+    Move(cube, _DOWN);
 }
 
 void Solve(Cube * cube) {

@@ -60,4 +60,4 @@ Chess board pattern:
     cube is solved ...
 
 3. Bugs
-    - When in 32 bit mode "COLOR_VALUES" gets wrong values.
+
