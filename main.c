@@ -17,10 +17,11 @@ int main(int argc, char const *argv[])
 
         PrintCubeRepresentation(&cube);
 
-        char * cubeString = GetCubeString(&cube);
+        printf("\nScramble: %s", cube.Scramble);
 
-        printf("\nScramble: %s\n", cube.Scramble);
-        printf("Position: %s\n\n", cubeString);
+        printf("\nPosition: ");
+        PrintPositionString(&cube);
+        printf("\n\n");
 
         Solve(&cube);
 
@@ -28,7 +29,6 @@ int main(int argc, char const *argv[])
 
         printf("\nSolution (Cross only): %s\n\n", cube.Solution);
 
-        free(cubeString);
         DisposeCube(&cube);
         exit(0);
     }
@@ -52,15 +52,14 @@ int main(int argc, char const *argv[])
 
             PrintCubeRepresentation(&cube);
 
-            char * cubeString = GetCubeString(&cube);
-
-            printf("Position: %s\n\n", cubeString);
-
+            printf("\nPosition: ");
+            PrintPositionString(&cube);
+            printf("\n\n");
+            
             Solve(&cube);
             
             printf("\nSolution (Cross only): %s\n\n", cube.Solution);
 
-            free(cubeString);
             DisposeCube(&cube);
             exit(0);
 
@@ -75,13 +74,12 @@ int main(int argc, char const *argv[])
 
             ParseCube(argv[2], &cube);
 
-            char * cubeString = GetCubeString(&cube);
-
             PrintCubeRepresentation(&cube);
 
-            printf("Position: %s\n\n", cubeString);
+            printf("\nPosition: ");
+            PrintPositionString(&cube);
+            printf("\n\n");
 
-            free(cubeString);
             DisposeCube(&cube);
             exit(0);
         }

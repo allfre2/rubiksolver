@@ -328,21 +328,13 @@ void ParseCube(char * position, Cube * cube) {
     return cube;
 }
 
-char * GetCubeString(Cube * cube) {
-    
-    char * cubeString = malloc(sizeof(char) * CUBE_REPRESENTATION_LENGTH);
-    memset(cubeString, 0, CUBE_REPRESENTATION_LENGTH);
-
-    int strIndex = 0;
-
+void PrintPositionString(Cube * cube) {
     for (int i = 0; i < SIDES; ++i) {
         for (int square = 1; square <= 8; ++square) {
             u_int color = SQUARE_COLOR(cube -> Faces [ ORDER [ i ] ], square);
-            cubeString [ strIndex++ ] = COLOR_CHARS [ color ];
+            printf("%c", COLOR_CHARS [ color ]);
         }
     }
-
-    return cubeString;
 }
 
 void PrintColorNames() {

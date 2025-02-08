@@ -30,6 +30,34 @@ const char CROSS_EDGE_ALGORITHMS[ EDGE_COUNT * EDGE_ORIENTATIONS ][8] = {
     { _RIGHT_I, _FRONT, _RIGHT }
 };
 
+bool HasValidCross(Cube * cube) {
+
+    // Get A lookup table ?
+    u_int color1, color2;
+
+    color1 = SQUARE_COLOR(cube -> Faces [DOWN], 2);
+    color2 = SQUARE_COLOR(cube -> Faces [FRONT], 6);
+
+    if (color1 != DOWN || color2 != FRONT) return false;
+
+    color1 = SQUARE_COLOR(cube -> Faces [DOWN], 8);
+    color2 = SQUARE_COLOR(cube -> Faces [LEFT], 6);
+
+    if (color1 != DOWN || color2 != LEFT) return false;
+
+    color1 = SQUARE_COLOR(cube -> Faces [DOWN], 6);
+    color2 = SQUARE_COLOR(cube -> Faces [BACK], 6);
+
+    if (color1 != DOWN || color2 != BACK) return false;
+
+    color1 = SQUARE_COLOR(cube -> Faces [DOWN], 4);
+    color2 = SQUARE_COLOR(cube -> Faces [RIGHT], 8);
+
+    if (color1 != DOWN || color2 != RIGHT) return false;
+
+    return true;
+}
+
 int LookupCrossEdgeAlgorithm(Cube * cube, u_int face1, u_int face2) {
     for (int i = 0; i < EDGE_COUNT * EDGE_ORIENTATIONS; ++i) {
         u_int * lookup = EDGE_LOOKUP_TABLE [ i ];
@@ -58,6 +86,9 @@ void SolveEdge(Cube * cube, u_int face1, u_int face2) {
 }
 
 void SolveCross(Cube * cube) {
+
+    if (HasValidCross(cube)) return;
+
     SolveEdge(cube, DOWN, FRONT);
     Move(cube, _DOWN);
     SolveEdge(cube, DOWN, LEFT);

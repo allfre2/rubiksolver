@@ -136,7 +136,7 @@ typedef struct {
 
 void InitCube(Cube *);
 void ParseCube(char *, Cube *);
-char * GetCubeString(Cube *);
+void PrintPositionString(Cube *);
 
 u_int RepresentationPattern[3][4];
 int SquareRepresentationPattern[3][3];

@@ -1,7 +1,6 @@
 
 CC = gcc
 CFLAGS = -std=c99 -O2 -Wall -fcommon -w
-POSIXTHREADS = -lpthread
 OBJS = main.o common.o solver.o
 WORKINGDIR = ./bin
 OUT= $(WORKINGDIR)/unisolver
@@ -15,7 +14,7 @@ resetenv:
 
 unisolver: $(OBJS) 
 	mkdir $(WORKINGDIR)
-	@$(CC) $(CFLAGS) -o $(OUT) $(OBJS) $(POSIXTHREADS) 
+	@$(CC) $(CFLAGS) -o $(OUT) $(OBJS)
 
 win32: 
 	i686-w64-mingw32-gcc -o $(OUT)32.exe $(CFLAGS) $(SOURCES)

@@ -50,6 +50,7 @@ Chess board pattern:
 
     - Optimize rotations ?
     - Improve scrambler ?
+    - Create cube position validation function
     - That's enough for a bit there ...
     - Don't squeeze the Charmin
 
