@@ -2,11 +2,16 @@
 
 3x3 Rubik's Cube scrambler and solver.
 
-Stress relief for some days.
+Stress relief / hobby for a few days.
 
 In Progress ...
 
-![25%](https://progress-bar.xyz/25)
+**Status**:
+
+![33%](https://progress-bar.xyz/33)
+
+- ~~Done~~: Build [white cross](https://ruwix.com/the-rubiks-cube/advanced-cfop-fridrich/white-cross/)
+- Next: [F2L](https://ruwix.com/the-rubiks-cube/advanced-cfop-fridrich/first-two-layers-f2l/) 
 
 ## Build
 
@@ -14,13 +19,19 @@ In Progress ...
 make
 ```
 
+## Install
+
+```bash
+make install
+```
+
 ## Details
 
 * Uses BitMaps to represent the cube.
-* Rotations are done by using bit twiddiling tricks.
-* Going to use Fridrich (CFOP) method to solve the cube.
+* Rotations are done by using [bit twiddiling tricks](https://graphics.stanford.edu/~seander/bithacks.html).
+* Implements [Fridrich (CFOP)](https://ruwix.com/the-rubiks-cube/advanced-cfop-fridrich/) method to solve the cube.
 * Supports 32 or 64 bit modes.
-* Intended to fit in an Arduino UNO (32k + 2k SRAM)
+* Intended to fit in an [Arduino UNO](https://docs.arduino.cc/hardware/uno-rev3/#tech-specs) (32k + 2k SRAM)
 
 ## Usage
 
@@ -36,6 +47,6 @@ unisolver
 
 ![Screenshot](./images/scramble.png)
 
-## :|
+## dude ...
 
 ![Screenshot](./images/dude_where_s_my_car.png)

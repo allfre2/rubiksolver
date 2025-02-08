@@ -46,6 +46,8 @@ int main(int argc, char const *argv[])
 
             InitCube(&cube);
             
+            cube.Solved = false;
+
             ApplyAlgorithm(&cube, argv[2]);
 
             PrintCubeRepresentation(&cube);
@@ -54,9 +56,12 @@ int main(int argc, char const *argv[])
 
             printf("Position: %s\n\n", cubeString);
 
+            Solve(&cube);
+            
+            printf("\nSolution (Cross only): %s\n\n", cube.Solution);
+
             free(cubeString);
             DisposeCube(&cube);
-
             exit(0);
 
         } else if (StrCmp(argv[1], "-p")) {
@@ -67,6 +72,7 @@ int main(int argc, char const *argv[])
             }
 
             Cube cube;
+
             ParseCube(argv[2], &cube);
 
             char * cubeString = GetCubeString(&cube);
@@ -77,7 +83,6 @@ int main(int argc, char const *argv[])
 
             free(cubeString);
             DisposeCube(&cube);
-
             exit(0);
         }
     }
