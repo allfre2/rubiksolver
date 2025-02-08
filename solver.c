@@ -43,9 +43,8 @@ int LookupCrossEdgeAlgorithm(Cube * cube, u_int face1, u_int face2) {
     return ALGORITHM_NOT_FOUND;
 }
 
-char * SolveCross(Cube * cube) {
-
-    int algorithm = LookupCrossEdgeAlgorithm(cube, DOWN, FRONT);
+void SolveEdge(Cube * cube, u_int face1, u_int face2) {
+    int algorithm = LookupCrossEdgeAlgorithm(cube, face1, face2);
 
     if (algorithm == ALGORITHM_NOT_FOUND) {
         printf("\n(!) Algorithm not found!\n");
@@ -56,6 +55,22 @@ char * SolveCross(Cube * cube) {
     ApplyAlgorithm(cube, CROSS_EDGE_ALGORITHMS [algorithm]);
 }
 
-char * Solve(Cube * cube) {
+void SolveCross(Cube * cube) {
+    SolveEdge(cube, DOWN, FRONT);
+    Move(cube, DOWN_CHAR);
+    SolveEdge(cube, DOWN, LEFT);
+    Move(cube, DOWN_CHAR);
+    SolveEdge(cube, DOWN, BACK);
+    Move(cube, DOWN_CHAR);
+    SolveEdge(cube, DOWN, RIGHT);
+    Move(cube, DOWN_CHAR);
+}
+
+void Solve(Cube * cube) {
+
+    cube -> Solving = true;
+
     SolveCross(cube);
+
+    cube -> Solving = false;
 }

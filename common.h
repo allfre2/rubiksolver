@@ -8,6 +8,8 @@
 #define EMPTY_FACE -1
 #define CENTER_SQUARE 9
 #define CUBE_REPRESENTATION_LENGTH 48
+#define MAXIMUM_SCRAMBLE_LENGTH 12
+#define MAXIMUM_SOLUTION_LENGTH 300
 
 #if defined(USE_32_BITS)
     #define SQUARE_SIZE 4
@@ -116,7 +118,12 @@ bool IsValidMoveString(char *);
 const u_int ORDER [SIDES];
 
 typedef struct {
-    u_int * Faces; 
+    u_int * Faces;
+    char * Scramble;
+    char * Solution;
+    int scrambleIndex;
+    int solutionIndex;
+    bool Solving;
 } Cube;
 
 void ParseCube(char *, Cube *);
@@ -129,7 +136,7 @@ void PrintCubeRepresentation(Cube *);
 void PrintInvalidRepresentationMessage();
 void PrintInvalidMovesMessage();
 
-char * GenerateRandomScramble(int);
+void GenerateRandomScramble(Cube *);
 void ApplyAlgorithm(Cube *, char *);
 void Move(Cube *, char);
 void Rotate(Cube *, u_int, bool);

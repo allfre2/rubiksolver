@@ -9,30 +9,28 @@ int main(int argc, char const *argv[])
 
     if (argc == 2 && StrCmp(argv[1], "-s")) {
 
-        char * scramble = GenerateRandomScramble(12);
-    
         Cube cube;
 
         ParseCube(SOLVED_POSITION, &cube);
-
-        ApplyAlgorithm(&cube, scramble);
+    
+        GenerateRandomScramble(&cube);
 
         PrintCubeRepresentation(&cube);
 
         char * cubeString = GetCubeString(&cube);
 
-        printf("\nScramble: %s\n", scramble);
+        printf("\nScramble: %s\n", cube.Scramble);
         printf("Position: %s\n\n", cubeString);
 
         free(cubeString);
-        free(scramble);
 
         Solve(&cube);
 
         PrintCubeRepresentation(&cube);
 
-        DisposeCube(&cube);
+        printf("\n Solution (Cross only): %s\n\n", cube.Solution);
 
+        DisposeCube(&cube);
         exit(0);
     }
 

@@ -295,6 +295,16 @@ void ParseCube(char * position, Cube * cube) {
     cube -> Faces = malloc(sizeof(u_int) * SIDES);
     memset(cube -> Faces, 0, sizeof(u_int) * SIDES);
 
+    cube -> Scramble = malloc(sizeof(char) * MAXIMUM_SCRAMBLE_LENGTH);
+    memset(cube -> Scramble, 0, sizeof(char) * MAXIMUM_SCRAMBLE_LENGTH);
+
+    cube -> Solution = malloc(sizeof(char) * MAXIMUM_SOLUTION_LENGTH);
+    memset(cube -> Solution, 0, sizeof(char) * MAXIMUM_SCRAMBLE_LENGTH);
+
+    cube -> scrambleIndex = 0;
+    cube -> solutionIndex = 0;
+    cube -> Solving = false;
+
     int i = 0;
     int face = 0;
     int square = 1;
@@ -439,21 +449,16 @@ void PrintInvalidMovesMessage() {
     printf("\n\n");
 }
 
-char * GenerateRandomScramble(int size) {
+void GenerateRandomScramble(Cube * cube) {
     
+    int size = MAXIMUM_SCRAMBLE_LENGTH;
     srand(time(0));
-    char * scramble = malloc(sizeof(char) * size + 1);
 
     int i = 0;
 
-    while (i < size) {
-        scramble[i] = LEGAL_MOVES [rand() % (SIDES * 2)];
-        ++i;
+    while (i++ < size) {
+        Move(cube, LEGAL_MOVES [rand() % (SIDES * 2)]);
     }
-
-    scramble[i] = 0;
-
-    return scramble;
 }
 
 void ApplyAlgorithm(Cube * cube, char * move) {
@@ -464,6 +469,22 @@ void ApplyAlgorithm(Cube * cube, char * move) {
 }
 
 void Move(Cube * cube, char move) {
+    if (cube -> Solving) {
+        if (cube -> solutionIndex == MAXIMUM_SOLUTION_LENGTH) {
+            printf("\n(!) Solution buffer filled!\n");
+            return; //TODO: handle error
+        }
+        cube -> Solution [cube -> solutionIndex] = move;
+        cube -> solutionIndex++;
+    } else {
+        if (cube -> scrambleIndex == MAXIMUM_SCRAMBLE_LENGTH) {
+            printf("\n(!) Scramble buffer filled!\n");
+            return; // Same
+        }
+        cube -> Scramble [cube -> scrambleIndex] = move;
+        cube -> scrambleIndex++;
+    }
+
     bool inverted = IsLower(move);
     Rotate(cube, MOVE_FACES [ move ], inverted);
 }
@@ -518,6 +539,8 @@ void RotateSquares(Cube * cube, u_int * faces, u_int face, int source, int desti
 
 void DisposeCube(Cube * cube) {
     free(cube -> Faces);
+    free(cube -> Scramble);
+    free(cube -> Solution);
 }
 
 void OutputHelpText() {

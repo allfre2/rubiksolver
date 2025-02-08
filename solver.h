@@ -24,5 +24,5 @@ extern const char CROSS_EDGE_ALGORITHMS[ EDGE_COUNT * EDGE_ORIENTATIONS ][8];
 
 char * LookupEdgeAlgorithm(Cube *, u_int, u_int);
 
-char * SolveCross(Cube *);
-char * Solve(Cube *);
+void SolveCross(Cube *);
+void Solve(Cube *);
