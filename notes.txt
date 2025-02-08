@@ -62,3 +62,6 @@ Chess board pattern:
     - Define scanning patterns and algorithms for PLL (1 to 3 weekends)
 
     cube is solved ...
+
+3. Bugs
+    - When in 32 bit mode "COLOR_VALUES" get wrong values.

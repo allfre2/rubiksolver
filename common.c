@@ -218,6 +218,33 @@ const int ADJACENT_SQUARES[SIDES][4][3] = {
     },
 };
 
+extern u_int EDGE_LOOKUP_TABLE[ EDGE_COUNT * EDGE_ORIENTATIONS ][4] = {
+    { DOWN, 2, FRONT, 6 },
+    { FRONT, 6, DOWN, 2 },
+    { DOWN, 4, RIGHT, 6 },
+    { RIGHT, 6, DOWN, 4 },
+    { DOWN, 6, BACK, 6 },
+    { BACK, 6, DOWN, 6 },
+    { DOWN, 8, LEFT, 6 },
+    { LEFT, 6, DOWN, 8 },
+    { FRONT, 8, LEFT, 4 },
+    { LEFT, 4, FRONT, 8 },
+    { FRONT, 2, UP, 6 },
+    { UP, 6, FRONT, 2 },
+    { FRONT, 4, RIGHT, 8 },
+    { RIGHT, 8, FRONT, 4 },
+    { BACK, 8, RIGHT, 4 },
+    { RIGHT, 4, BACK, 8 },
+    { BACK, 4, LEFT, 8 },
+    { LEFT, 8, BACK, 4 },
+    { UP, 8, LEFT, 2 },
+    { LEFT, 2, UP, 8 },
+    { UP, 2, BACK, 2 },
+    { BACK, 2, UP, 2 },
+    { UP, 4, RIGHT, 2 },
+    { RIGHT, 2, UP, 4 },
+};
+
 bool IsLegalChar(char c) {
     int i = 0;
 
@@ -351,7 +378,7 @@ void PrintFaceRow(Cube * cube, u_int face, int face_row) {
     if (use_terminal_colors)
     {
         printf("%s%c", code1, EMPTY_SQUARE_CHAR);
-        printf("%s%s%c", code2, (square2 == CENTER_SQUARE) ? char2 : EMPTY_SQUARE_CHAR);
+        printf("%s%c", code2, (square2 == CENTER_SQUARE) ? char2 : EMPTY_SQUARE_CHAR);
         printf("%s%c", code3, EMPTY_SQUARE_CHAR);
         printf("%s", RESET_COLOR_CODE);
     } else {

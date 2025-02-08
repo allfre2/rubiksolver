@@ -36,7 +36,7 @@
 #endif
 
 #define SQUARE_COLOR(face, square) (((face) >> (SQUARE_SIZE * (FACE_SQUARE_COUNT - square))) & SQUARE_FIRST_BYTE)
-#define SET_SQUARE_COLOR(face, square, color) (face |= (color << (SQUARE_SIZE * (FACE_SQUARE_COUNT - square))))
+#define SET_SQUARE_COLOR(face, square, color) ((face) |= ((color) << (SQUARE_SIZE * (FACE_SQUARE_COUNT - (square)))))
 #define UPDATE_SQUARE_COLOR(face, square, color) (face = ((face & FACE_SQUARE_MASKS [square]) | (color << (SQUARE_SIZE * (FACE_SQUARE_COUNT - square)))))
 #define ROTATE_RIGHT(face) ((face >> (SQUARE_SIZE * 2)) | (face << (SQUARE_SIZE * 6)))
 #define ROTATE_LEFT(face) ((face << (SQUARE_SIZE * 2)) | (face >> (SQUARE_SIZE * 6)))
@@ -95,6 +95,13 @@ extern const int ADJACENT_SQUARES[SIDES][4][3];
 u_int FACE_SQUARE_MASKS[FACE_SQUARE_COUNT+1];
 
 u_int MOVE_FACES[SIDES*2];
+
+// Edge/Cross constants
+
+#define EDGE_COUNT 12
+#define EDGE_ORIENTATIONS 2
+
+extern u_int EDGE_LOOKUP_TABLE[ EDGE_COUNT * EDGE_ORIENTATIONS ][4];
 
 void EnableDebug(bool);
 int Strlen(char *);

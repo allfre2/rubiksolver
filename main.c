@@ -26,6 +26,11 @@ int main(int argc, char const *argv[])
 
         free(cubeString);
         free(scramble);
+
+        Solve(&cube);
+
+        PrintCubeRepresentation(&cube);
+
         DisposeCube(&cube);
 
         exit(0);
