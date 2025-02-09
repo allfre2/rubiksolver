@@ -47,6 +47,6 @@ unisolver
 
 ![Screenshot](./images/scramble.png)
 
-## dude ...
+## ...
 
 ![Screenshot](./images/dude_where_s_my_car.png)
