@@ -506,15 +506,15 @@ void RotateSides(Cube * cube, u_int face, bool inverted) {
     memcpy(faces, cube -> Faces, sizeof(u_int) * SIDES);
 
     if (inverted) {
-        for (int side = 3; side > -1; --side) {
-            int destination = (side == 0) ? 3 : side - 1;
-            RotateSquares(cube, &faces, face, side, destination);
-        }
+        RotateSquares(cube, &faces, face, 3, 2);
+        RotateSquares(cube, &faces, face, 2, 1);
+        RotateSquares(cube, &faces, face, 1, 0);
+        RotateSquares(cube, &faces, face, 0, 3);
     } else {
-        for (int side = 0; side < 4; ++side) {
-            int destination = (side == 3) ? 0 : side + 1;
-            RotateSquares(cube, &faces, face, side, destination);
-        }
+        RotateSquares(cube, &faces, face, 0, 1);
+        RotateSquares(cube, &faces, face, 1, 2);
+        RotateSquares(cube, &faces, face, 2, 3);
+        RotateSquares(cube, &faces, face, 3, 0);
     }
 }
 
@@ -525,15 +525,28 @@ void RotateSquares(Cube * cube, u_int * faces, u_int face, int source, int desti
         int * sourceSquares = ADJACENT_SQUARES[face][source];
         int * destinationSquares = ADJACENT_SQUARES[face][destination];
 
-        for (int n = 0; n < 3; ++n) {
+        u_int color;
 
-            u_int color = SQUARE_COLOR(faces [ adjacentSides [ source ] ], sourceSquares [n]);
+        color = SQUARE_COLOR(faces [ adjacentSides [ source ] ], sourceSquares [0]);
 
-            UPDATE_SQUARE_COLOR(
-                cube -> Faces [ adjacentSides [destination] ],
-                destinationSquares [n],
-                color);
-        }
+        UPDATE_SQUARE_COLOR(
+            cube -> Faces [ adjacentSides [destination] ],
+            destinationSquares [0],
+            color);
+
+        color = SQUARE_COLOR(faces [ adjacentSides [ source ] ], sourceSquares [1]);
+
+        UPDATE_SQUARE_COLOR(
+            cube -> Faces [ adjacentSides [destination] ],
+            destinationSquares [1],
+            color);
+
+        color = SQUARE_COLOR(faces [ adjacentSides [ source ] ], sourceSquares [2]);
+
+        UPDATE_SQUARE_COLOR(
+            cube -> Faces [ adjacentSides [destination] ],
+            destinationSquares [2],
+            color);
 }
 
 void DisposeCube(Cube * cube) {
