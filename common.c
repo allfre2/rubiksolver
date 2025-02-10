@@ -391,6 +391,7 @@ void ParseCube(char * position, Cube * cube) {
     cube -> solutionIndex = 0;
     cube -> Scrambling = false;
     cube -> Solving = false;
+    cube -> Rotation = FRONT;
 
     int i = 0;
     int face = 0;
@@ -552,6 +553,9 @@ void ApplyAlgorithm(Cube * cube, char * move) {
 }
 
 void Move(Cube * cube, char move) {
+
+    move = GetMoveRotation(cube -> Rotation, move);
+
     if (cube -> Solving) {
         if (cube -> solutionIndex == MAXIMUM_SOLUTION_LENGTH) {
             printf("\n(!) Solution buffer is full!\n");
@@ -572,10 +576,6 @@ void Move(Cube * cube, char move) {
 
     bool inverted = IsLower(move);
     Rotate(cube, MOVE_FACES [ move ], inverted);
-}
-
-void MoveRotated(Cube * cube, u_int rotation, char move) {
-    Move(cube, GetMoveRotation(rotation, move));
 }
 
 void Rotate(Cube * cube, u_int face, bool inverted) {

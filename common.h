@@ -129,6 +129,7 @@ typedef struct {
     u_int * Faces;
     char * Scramble;
     char * Solution;
+    u_int Rotation;
     int scrambleIndex;
     int solutionIndex;
     bool Scrambling;
@@ -150,7 +151,6 @@ void PrintInvalidMovesMessage();
 void Scramble(Cube *);
 void ApplyAlgorithm(Cube *, char *);
 void Move(Cube *, char);
-void MoveRotated(Cube *, u_int, char);
 void Rotate(Cube *, u_int, bool);
 
 void DisposeCube(Cube *);
