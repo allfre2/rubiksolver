@@ -574,6 +574,10 @@ void Move(Cube * cube, char move) {
     Rotate(cube, MOVE_FACES [ move ], inverted);
 }
 
+void MoveRotated(Cube * cube, u_int rotation, char move) {
+    Move(cube, GetMoveRotation(rotation, move));
+}
+
 void Rotate(Cube * cube, u_int face, bool inverted) {
 
     if (inverted) {
