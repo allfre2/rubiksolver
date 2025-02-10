@@ -190,6 +190,15 @@ const int ADJACENT_SQUARES[SIDES][4][3] = {
     },
 };
 
+const u_int FACE_ROTATIONS[SIDES][SIDES] = {
+    { BACK, RIGHT, DOWN, LEFT, UP, FRONT }, // DOWN Rotation
+    { DOWN, BACK, RIGHT, FRONT, LEFT, UP }, // RIGHT Rotation
+    { DOWN, RIGHT, FRONT, LEFT, BACK, UP }, // FRONT Rotation (Default rotation)
+    { DOWN, FRONT, LEFT, BACK, RIGHT, UP }, // LEFT Rotation
+    { DOWN, LEFT, BACK, RIGHT, FRONT, UP }, // BACK Rotation
+    { FRONT, RIGHT, UP, LEFT, DOWN, BACK }, // UP Rotation
+};
+
 extern u_int EDGE_LOOKUP_TABLE[ EDGE_COUNT * EDGE_ORIENTATIONS ][4] = {
     { DOWN, 2, FRONT, 6 },
     { FRONT, 6, DOWN, 2 },
@@ -260,6 +269,83 @@ bool IsValidMoveString(char * str) {
     }
 
     return true;
+}
+
+// Use Lookup Table ?
+char GetMoveRotation(u_int rotation, char move) {
+    switch (rotation) {
+
+        case DOWN:
+            switch (move) {
+                case _DOWN: return _BACK; break;
+                case _FRONT: return _DOWN; break;
+                case _BACK: return _UP; break;
+                case _UP: return _FRONT; break;
+                case _DOWN_I: return _BACK_I; break;
+                case _FRONT_I: return _DOWN_I; break;
+                case _BACK_I: return _UP_I; break;
+                case _UP_I: return _FRONT_I; break;
+            }
+        break;
+
+        case RIGHT:
+            switch (move) {
+                case _FRONT: return _RIGHT; break;
+                case _BACK: return _LEFT; break;
+                case _LEFT: return _FRONT; break;
+                case _RIGHT: return _BACK; break;
+                case _FRONT_I: return _RIGHT_I; break;
+                case _BACK_I: return _LEFT_I; break;
+                case _LEFT_I: return _FRONT_I; break;
+                case _RIGHT_I: return _BACK_I; break;
+            }
+        break;
+
+        case FRONT:
+
+        break;
+
+        case LEFT:
+            switch (move) {
+                case _FRONT: return _LEFT; break;
+                case _BACK: return _RIGHT; break;
+                case _LEFT: return _BACK; break;
+                case _RIGHT: return _FRONT; break;
+                case _FRONT_I: return _LEFT_I; break;
+                case _BACK_I: return _RIGHT_I; break;
+                case _LEFT_I: return _BACK_I; break;
+                case _RIGHT_I: return _FRONT_I; break;
+            }
+        break;
+
+        case BACK:
+            switch (move) {
+                case _FRONT: return _BACK; break;
+                case _BACK: return _FRONT; break;
+                case _LEFT: return _RIGHT; break;
+                case _RIGHT: return _LEFT; break;
+                case _FRONT_I: return _BACK_I; break;
+                case _BACK_I: return _FRONT_I; break;
+                case _LEFT_I: return _RIGHT_I; break;
+                case _RIGHT_I: return _LEFT_I; break;
+            }
+        break;
+
+        case UP:
+            switch (move) {
+                case _DOWN: return _FRONT; break;
+                case _FRONT: return _UP; break;
+                case _BACK: return _DOWN; break;
+                case _UP: return _BACK; break;
+                case _DOWN_I: return _FRONT_I; break;
+                case _FRONT_I: return _UP_I; break;
+                case _BACK_I: return _DOWN_I; break;
+                case _UP_I: return _BACK_I; break;
+            }
+        break;
+    }
+
+    return move;
 }
 
 u_int GetColorValue(char color_char) {
