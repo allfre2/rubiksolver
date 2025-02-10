@@ -146,12 +146,12 @@ void Init() {
         }
     }
 
-    MOVE_FACES [ _DOWN ]        = DOWN;
-    MOVE_FACES [ _RIGHT ]       = RIGHT;
-    MOVE_FACES [ _FRONT ]       = FRONT;
-    MOVE_FACES [ _LEFT ]        = LEFT;
-    MOVE_FACES [ _BACK ]        = BACK;
-    MOVE_FACES [ _UP ]          = UP;
+    MOVE_FACES [ _DOWN ]    = DOWN;
+    MOVE_FACES [ _RIGHT ]   = RIGHT;
+    MOVE_FACES [ _FRONT ]   = FRONT;
+    MOVE_FACES [ _LEFT ]    = LEFT;
+    MOVE_FACES [ _BACK ]    = BACK;
+    MOVE_FACES [ _UP ]      = UP;
     MOVE_FACES [ _DOWN_I ]  = DOWN;
     MOVE_FACES [ _RIGHT_I ] = RIGHT;
     MOVE_FACES [ _FRONT_I ] = FRONT;
@@ -269,83 +269,6 @@ bool IsValidMoveString(char * str) {
     }
 
     return true;
-}
-
-// Use Lookup Table ?
-char GetMoveRotation(u_int rotation, char move) {
-    switch (rotation) {
-
-        case DOWN:
-            switch (move) {
-                case _DOWN: return _BACK; break;
-                case _FRONT: return _DOWN; break;
-                case _BACK: return _UP; break;
-                case _UP: return _FRONT; break;
-                case _DOWN_I: return _BACK_I; break;
-                case _FRONT_I: return _DOWN_I; break;
-                case _BACK_I: return _UP_I; break;
-                case _UP_I: return _FRONT_I; break;
-            }
-        break;
-
-        case RIGHT:
-            switch (move) {
-                case _FRONT: return _RIGHT; break;
-                case _BACK: return _LEFT; break;
-                case _LEFT: return _FRONT; break;
-                case _RIGHT: return _BACK; break;
-                case _FRONT_I: return _RIGHT_I; break;
-                case _BACK_I: return _LEFT_I; break;
-                case _LEFT_I: return _FRONT_I; break;
-                case _RIGHT_I: return _BACK_I; break;
-            }
-        break;
-
-        case FRONT:
-
-        break;
-
-        case LEFT:
-            switch (move) {
-                case _FRONT: return _LEFT; break;
-                case _BACK: return _RIGHT; break;
-                case _LEFT: return _BACK; break;
-                case _RIGHT: return _FRONT; break;
-                case _FRONT_I: return _LEFT_I; break;
-                case _BACK_I: return _RIGHT_I; break;
-                case _LEFT_I: return _BACK_I; break;
-                case _RIGHT_I: return _FRONT_I; break;
-            }
-        break;
-
-        case BACK:
-            switch (move) {
-                case _FRONT: return _BACK; break;
-                case _BACK: return _FRONT; break;
-                case _LEFT: return _RIGHT; break;
-                case _RIGHT: return _LEFT; break;
-                case _FRONT_I: return _BACK_I; break;
-                case _BACK_I: return _FRONT_I; break;
-                case _LEFT_I: return _RIGHT_I; break;
-                case _RIGHT_I: return _LEFT_I; break;
-            }
-        break;
-
-        case UP:
-            switch (move) {
-                case _DOWN: return _FRONT; break;
-                case _FRONT: return _UP; break;
-                case _BACK: return _DOWN; break;
-                case _UP: return _BACK; break;
-                case _DOWN_I: return _FRONT_I; break;
-                case _FRONT_I: return _UP_I; break;
-                case _BACK_I: return _DOWN_I; break;
-                case _UP_I: return _BACK_I; break;
-            }
-        break;
-    }
-
-    return move;
 }
 
 u_int GetColorValue(char color_char) {
@@ -529,6 +452,87 @@ void PrintInvalidMovesMessage() {
     printf("\n\n");
 }
 
+u_int GetFace(Cube * cube, u_int face) {
+    return FACE_ROTATIONS [cube -> Rotation] [face];
+}
+
+// Use Lookup Table ?
+char GetMove(Cube * cube, char move) {
+    switch (cube -> Rotation) {
+
+        case DOWN:
+            switch (move) {
+                case _DOWN: return _BACK; break;
+                case _FRONT: return _DOWN; break;
+                case _BACK: return _UP; break;
+                case _UP: return _FRONT; break;
+                case _DOWN_I: return _BACK_I; break;
+                case _FRONT_I: return _DOWN_I; break;
+                case _BACK_I: return _UP_I; break;
+                case _UP_I: return _FRONT_I; break;
+            }
+        break;
+
+        case RIGHT:
+            switch (move) {
+                case _FRONT: return _RIGHT; break;
+                case _BACK: return _LEFT; break;
+                case _LEFT: return _FRONT; break;
+                case _RIGHT: return _BACK; break;
+                case _FRONT_I: return _RIGHT_I; break;
+                case _BACK_I: return _LEFT_I; break;
+                case _LEFT_I: return _FRONT_I; break;
+                case _RIGHT_I: return _BACK_I; break;
+            }
+        break;
+
+        case FRONT:
+
+        break;
+
+        case LEFT:
+            switch (move) {
+                case _FRONT: return _LEFT; break;
+                case _BACK: return _RIGHT; break;
+                case _LEFT: return _BACK; break;
+                case _RIGHT: return _FRONT; break;
+                case _FRONT_I: return _LEFT_I; break;
+                case _BACK_I: return _RIGHT_I; break;
+                case _LEFT_I: return _BACK_I; break;
+                case _RIGHT_I: return _FRONT_I; break;
+            }
+        break;
+
+        case BACK:
+            switch (move) {
+                case _FRONT: return _BACK; break;
+                case _BACK: return _FRONT; break;
+                case _LEFT: return _RIGHT; break;
+                case _RIGHT: return _LEFT; break;
+                case _FRONT_I: return _BACK_I; break;
+                case _BACK_I: return _FRONT_I; break;
+                case _LEFT_I: return _RIGHT_I; break;
+                case _RIGHT_I: return _LEFT_I; break;
+            }
+        break;
+
+        case UP:
+            switch (move) {
+                case _DOWN: return _FRONT; break;
+                case _FRONT: return _UP; break;
+                case _BACK: return _DOWN; break;
+                case _UP: return _BACK; break;
+                case _DOWN_I: return _FRONT_I; break;
+                case _FRONT_I: return _UP_I; break;
+                case _BACK_I: return _DOWN_I; break;
+                case _UP_I: return _BACK_I; break;
+            }
+        break;
+    }
+
+    return move;
+}
+
 void Scramble(Cube * cube) {
     
     cube -> Solved = false;
@@ -554,7 +558,7 @@ void ApplyAlgorithm(Cube * cube, char * move) {
 
 void Move(Cube * cube, char move) {
 
-    move = GetMoveRotation(cube -> Rotation, move);
+    move = GetMove(cube, move);
 
     if (cube -> Solving) {
         if (cube -> solutionIndex == MAXIMUM_SOLUTION_LENGTH) {

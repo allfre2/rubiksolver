@@ -148,6 +148,8 @@ void PrintCubeRepresentation(Cube *);
 void PrintInvalidRepresentationMessage();
 void PrintInvalidMovesMessage();
 
+u_int GetFace(Cube *, u_int);
+char GetMove(Cube *, char);
 void Scramble(Cube *);
 void ApplyAlgorithm(Cube *, char *);
 void Move(Cube *, char);
