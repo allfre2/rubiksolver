@@ -3,16 +3,16 @@ CC = gcc
 CFLAGS = -std=c99 -O2 -Wall -fcommon -w
 OBJS = main.o common.o solver.o
 WORKINGDIR = ./bin
-OUT= $(WORKINGDIR)/unisolver
+OUT= $(WORKINGDIR)/rubiksolver
 SOURCES = main.c common.c  solver.c
 RM = rm
 
-default: resetenv unisolver removebinaries
+default: resetenv rubiksolver removebinaries
 
 resetenv:
 	if [ -d $(WORKINGDIR) ]; then rm -rf $(WORKINGDIR); fi
 
-unisolver: $(OBJS) 
+rubiksolver: $(OBJS) 
 	mkdir $(WORKINGDIR)
 	@$(CC) $(CFLAGS) -o $(OUT) $(OBJS)
 
@@ -27,7 +27,7 @@ removebinaries:
 
 clean: resetenv removebinaries
 
-all: resetenv unisolver win32 win64 removebinaries
+all: resetenv rubiksolver win32 win64 removebinaries
 
 install: 
 	@sudo cp $(OUT)/* /usr/bin

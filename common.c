@@ -650,7 +650,7 @@ void DisposeCube(Cube * cube) {
 }
 
 void OutputHelpText() {
-    printf("\nunisolver\n");
+    printf("\nrubiksolver\n");
 
     printf("\n\t-s => Generates a scramble.\n");
     printf("\n\t-s [algorithm/moves] => Performs the second argument's moves on the cube, outputs solution.\n");

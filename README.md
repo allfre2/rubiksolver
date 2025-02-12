@@ -1,17 +1,8 @@
-# UniSolver (3x3 Rubik's Cube)
+# RubikSolver (3x3 Rubik's Cube)
 
 3x3 Rubik's Cube scrambler and solver.
 
-Stress relief / hobby for a few days.
-
-In Progress ...
-
-**Status**:
-
-![33%](https://progress-bar.xyz/33)
-
-- ~~Done~~: Build [white cross](https://ruwix.com/the-rubiks-cube/advanced-cfop-fridrich/white-cross/)
-- Next: [F2L](https://ruwix.com/the-rubiks-cube/advanced-cfop-fridrich/first-two-layers-f2l/) 
+In Progress ..
 
 ## Build
 
@@ -35,7 +26,7 @@ make install
 
 ## Usage
 
-unisolver
+rubiksolver
 
         -s => Generates a scramble.
 
@@ -47,6 +38,3 @@ unisolver
 
 ![Screenshot](./images/scramble.png)
 
-## ...
-
-![Screenshot](./images/dude_where_s_my_car.png)
