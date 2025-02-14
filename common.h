@@ -50,6 +50,10 @@
 #define UPDATE_SQUARE_COLOR(face, square, color) (face = ((face & FACE_SQUARE_MASKS [square]) | (color << (SQUARE_SIZE * (FACE_SQUARE_COUNT - square)))))
 #define ROTATE_RIGHT(face) ((face >> (SQUARE_SIZE * 2)) | (face << (SQUARE_SIZE * 6)))
 #define ROTATE_LEFT(face) ((face << (SQUARE_SIZE * 2)) | (face >> (SQUARE_SIZE * 6)))
+#define ROTATE_SQUARE_90(square) ((square + 6) % FACE_SQUARE_COUNT)
+#define ROTATE_SQUARE_180(square) ((square + 4) % FACE_SQUARE_COUNT)
+#define ROTATE_SQUARE_270(square) ((square + 2) % FACE_SQUARE_COUNT)
+
 
 extern bool debug_enabled;
 extern bool use_terminal_colors;
@@ -109,8 +113,11 @@ extern const u_int FACE_ROTATIONS[SIDES][SIDES];
 
 #define EDGE_COUNT 12
 #define EDGE_ORIENTATIONS 2
+#define CORNER_COUNT 8
+#define CORNER_ORIENTATIONS 3
 
-extern u_int EDGE_LOOKUP_TABLE[ EDGE_COUNT * EDGE_ORIENTATIONS ][4];
+extern const u_int EDGE_LOOKUP_TABLE[ EDGE_COUNT * EDGE_ORIENTATIONS ][4];
+extern const u_int CORNER_LOOKUP_TABLE[ CORNER_COUNT * CORNER_ORIENTATIONS ][6];
 
 void EnableDebug(bool);
 int Strlen(char *);
@@ -149,6 +156,7 @@ void PrintInvalidRepresentationMessage();
 void PrintInvalidMovesMessage();
 
 u_int GetFace(Cube *, u_int);
+u_int GetSquare(Cube *, u_int, u_int);
 char GetMove(Cube *, char);
 void Scramble(Cube *);
 void ApplyAlgorithm(Cube *, char *);

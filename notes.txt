@@ -45,10 +45,9 @@ Chess board pattern:
     unisolver -s UUDDRRLLFFBB
 
 - TODO:
-    - Keep in mind that you only have 1.5k of memory and 10k of storage
-    - Define way of performing algorithms and pattern scans with the cube rotated
+    - Keep in mind that you only have ~1.5k of memory and ~30k of storage
 
-    - Optimize rotations ?
+    - Optimize rotations (twists) ?
     - Improve scrambler ?
     - Create cube position validation function
     - That's enough for a bit there ...

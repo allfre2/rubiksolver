@@ -199,7 +199,7 @@ const u_int FACE_ROTATIONS[SIDES][SIDES] = {
     { FRONT, RIGHT, UP, LEFT, DOWN, BACK }, // UP Rotation
 };
 
-extern u_int EDGE_LOOKUP_TABLE[ EDGE_COUNT * EDGE_ORIENTATIONS ][4] = {
+const u_int EDGE_LOOKUP_TABLE[ EDGE_COUNT * EDGE_ORIENTATIONS ][4] = {
     { DOWN, 2, FRONT, 6 },
     { FRONT, 6, DOWN, 2 },
     { DOWN, 4, RIGHT, 6 },
@@ -224,6 +224,13 @@ extern u_int EDGE_LOOKUP_TABLE[ EDGE_COUNT * EDGE_ORIENTATIONS ][4] = {
     { BACK, 2, UP, 2 },
     { UP, 4, RIGHT, 2 },
     { RIGHT, 2, UP, 4 },
+};
+
+const u_int CORNER_LOOKUP_TABLE[ CORNER_COUNT * CORNER_ORIENTATIONS ][6] = {
+    // FILL THIS UP
+    { FRONT, 5, RIGHT, 7, DOWN, 3},
+    { RIGHT, 7, DOWN, 3, FRONT, 5},
+    { DOWN, 3, FRONT, 5, RIGHT, 7},
 };
 
 bool IsLegalChar(char c) {
@@ -454,6 +461,48 @@ void PrintInvalidMovesMessage() {
 
 u_int GetFace(Cube * cube, u_int face) {
     return FACE_ROTATIONS [cube -> Rotation] [face];
+}
+
+u_int GetSquare(Cube * cube, u_int face, u_int square) {
+    switch (cube -> Rotation)
+    {
+        case DOWN:
+            switch (face) {
+                case DOWN: return ROTATE_SQUARE_180(square);
+                case RIGHT: return ROTATE_SQUARE_90(square);
+                case LEFT: return ROTATE_SQUARE_270(square);
+                case BACK: return ROTATE_SQUARE_180(square);
+            }
+        break;
+        case RIGHT:
+            switch (face) {
+                case DOWN: return ROTATE_SQUARE_270(square);
+                case UP: return ROTATE_SQUARE_90(square);
+            }
+        break;
+        case LEFT:
+            switch (face) {
+                case DOWN: return ROTATE_SQUARE_90(square);
+                case UP: return ROTATE_SQUARE_270(square);
+            }
+        break;
+        case BACK:
+            switch (face) {
+                case DOWN: return ROTATE_SQUARE_180(square);
+                case UP: return ROTATE_SQUARE_180(square);
+            }
+        break;
+        case UP:
+            switch (face) {
+                case RIGHT: return ROTATE_SQUARE_270(square);
+                case LEFT: return ROTATE_SQUARE_90(square);
+                case BACK: return ROTATE_SQUARE_90(square);
+                case UP: return ROTATE_SQUARE_180(square);
+            }
+        break;
+    }
+
+    return square;
 }
 
 // Use Lookup Table ?

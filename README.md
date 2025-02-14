@@ -2,7 +2,9 @@
 
 3x3 Rubik's Cube scrambler and solver.
 
-In Progress ..
+In Progress ...
+
+![36%](https://progress-bar.xyz/36)
 
 ## Build
 
