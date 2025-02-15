@@ -84,6 +84,18 @@ bool IsLower(char * c) {
     return c >= 'a' && c <= 'z';
 }
 
+char ToLower(char c) {
+    return c + ((char)32);
+}
+
+char SwitchCase(char c) {
+    if (IsLower(c)) {
+        return c - ((char)32);
+    } else {
+        return c + ((char)32);
+    }
+}
+
 void Init() {
     COLOR_CHARS[WHITE]  = WHITE_CHAR;
     COLOR_CHARS[GREEN]  = GREEN_CHAR;
@@ -315,13 +327,15 @@ void ParseCube(char * position, Cube * cube) {
     memset(cube -> Scramble, 0, sizeof(char) * MAXIMUM_SCRAMBLE_LENGTH);
 
     cube -> Solution = malloc(sizeof(char) * MAXIMUM_SOLUTION_LENGTH);
-    memset(cube -> Solution, 0, sizeof(char) * MAXIMUM_SCRAMBLE_LENGTH);
+    memset(cube -> Solution, 0, sizeof(char) * MAXIMUM_SOLUTION_LENGTH);
 
     cube -> scrambleIndex = 0;
     cube -> solutionIndex = 0;
     cube -> Scrambling = false;
     cube -> Solving = false;
     cube -> Rotation = FRONT;
+
+    cube -> OriginalSolution = 0;
 
     int i = 0;
     int face = 0;
@@ -696,6 +710,8 @@ void DisposeCube(Cube * cube) {
     free(cube -> Faces);
     free(cube -> Scramble);
     free(cube -> Solution);
+
+    if (cube -> OriginalSolution) free(cube -> OriginalSolution);
 }
 
 void OutputHelpText() {

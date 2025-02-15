@@ -123,6 +123,8 @@ void EnableDebug(bool);
 int Strlen(char *);
 bool StrCmp(char *, char *);
 bool IsLower(char *);
+char ToLower(char);
+char SwitchCase(char);
 void Init();
 bool IsLegalChar(char);
 bool IsLegalMove(char);
@@ -136,6 +138,7 @@ typedef struct {
     u_int * Faces;
     char * Scramble;
     char * Solution;
+    char * OriginalSolution;
     u_int Rotation;
     int scrambleIndex;
     int solutionIndex;

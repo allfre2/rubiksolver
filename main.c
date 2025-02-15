@@ -26,8 +26,9 @@ int main(int argc, char const *argv[])
         Solve(&cube);
 
         PrintCubeRepresentation(&cube);
-
-        printf("\nSolution (Cross only): %s\n\n", cube.Solution);
+        
+        printf("\nOriginal Solution: %s", cube.OriginalSolution);
+        printf("\nOptimized Solution (Cross only): %s\n\n", cube.Solution);
 
         DisposeCube(&cube);
         exit(0);
@@ -58,7 +59,8 @@ int main(int argc, char const *argv[])
             
             Solve(&cube);
             
-            printf("\nSolution (Cross only): %s\n\n", cube.Solution);
+            printf("\nOriginal Solution: %s", cube.OriginalSolution);
+            printf("\nOptimized Solution (Cross only): %s\n\n", cube.Solution);
 
             DisposeCube(&cube);
             exit(0);
