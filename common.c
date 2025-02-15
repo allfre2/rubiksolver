@@ -368,6 +368,21 @@ void PrintPositionString(Cube * cube) {
     }
 }
 
+void PrintStandardNotation(char * str) {
+    int i = 0;
+    while (str [i]) {
+        char c = IsLower(str[i]) ? SwitchCase(str[i]) : str[i];
+        
+        if (str [i+1] && str[i] == str[i+1]) {
+            printf("%c2 ", c);
+            i += 2;
+        } else {
+            printf("%c%c ", c, IsLower(str[i]) ? '\'' : 0);
+            ++i;
+        }
+    }
+}
+
 void PrintColorNames() {
     for (int i = 0; i < SIDES; ++i) {
         printf("%s: %c %s%c%s\n",
@@ -712,6 +727,84 @@ void DisposeCube(Cube * cube) {
     free(cube -> Solution);
 
     if (cube -> OriginalSolution) free(cube -> OriginalSolution);
+}
+
+void CleanSolution(Cube * cube) {
+
+    cube -> OriginalSolution = malloc(sizeof(char) * MAXIMUM_SOLUTION_LENGTH);
+    memcpy(cube -> OriginalSolution, cube -> Solution, sizeof(char) * MAXIMUM_SOLUTION_LENGTH);
+
+    Clean4Repeated(cube);
+    Clean3Repeated(cube);
+    CleanConsecutiveOpposites(cube);
+}
+
+void Clean4Repeated(Cube * cube) {
+    char * cleanSolution = malloc(sizeof(char) * MAXIMUM_SOLUTION_LENGTH);
+    memset(cleanSolution, 0, sizeof(char) * MAXIMUM_SOLUTION_LENGTH);
+
+    int i = 0;
+    int solutionIndex = 0;
+
+    for (; i < MAXIMUM_SOLUTION_LENGTH && cube -> Solution [i];) {
+        if ((cube -> Solution [i] == cube -> Solution [i+1])
+            && (cube -> Solution [i+1] == cube -> Solution [i+2])
+            && (cube -> Solution [i+2] == cube -> Solution [i+3])) {
+                i = i + 4;
+                continue;
+        }
+
+        cleanSolution [solutionIndex++] = cube -> Solution [i];
+        ++i;
+    }
+
+    free (cube -> Solution);
+    cube -> Solution = cleanSolution;
+    cube -> solutionIndex = solutionIndex;
+}
+
+void Clean3Repeated(Cube * cube) {
+    char * cleanSolution = malloc(sizeof(char) * MAXIMUM_SOLUTION_LENGTH);
+    memset(cleanSolution, 0, sizeof(char) * MAXIMUM_SOLUTION_LENGTH);
+
+    int i = 0;
+    int solutionIndex = 0;
+    for (; i < MAXIMUM_SOLUTION_LENGTH && cube -> Solution [i];) {
+        if (cube -> Solution [i] == cube -> Solution [i+1]
+            && cube -> Solution [i+1] == cube -> Solution [i+2]) {
+                cleanSolution [solutionIndex++] = SwitchCase(cube -> Solution [i]);
+                i = i + 3;
+                continue;
+        }
+
+        cleanSolution [solutionIndex++] = cube -> Solution [i];
+        ++i;
+    }
+
+    free (cube -> Solution);
+    cube -> Solution = cleanSolution;
+    cube -> solutionIndex = solutionIndex;
+}
+
+void CleanConsecutiveOpposites(Cube * cube) {
+    char * cleanSolution = malloc(sizeof(char) * MAXIMUM_SOLUTION_LENGTH);
+    memset(cleanSolution, 0, sizeof(char) * MAXIMUM_SOLUTION_LENGTH);
+    
+    int i = 0;
+    int solutionIndex = 0;
+    for (; i < MAXIMUM_SOLUTION_LENGTH-1; ++i) {
+        if (cube -> Solution [i] == ToLower(cube -> Solution [i+1])
+            || cube -> Solution [i+1] == ToLower(cube -> Solution [i])) {
+                ++i;
+                continue;
+        }
+
+        cleanSolution [solutionIndex++] = cube -> Solution [i];
+    }
+
+    free (cube -> Solution);
+    cube -> Solution = cleanSolution;
+    cube -> solutionIndex = solutionIndex;
 }
 
 void OutputHelpText() {

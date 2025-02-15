@@ -150,6 +150,7 @@ typedef struct {
 void InitCube(Cube *);
 void ParseCube(char *, Cube *);
 void PrintPositionString(Cube *);
+void PrintStandardNotation(char *);
 
 u_int RepresentationPattern[3][4];
 int SquareRepresentationPattern[3][3];
@@ -167,5 +168,6 @@ void Move(Cube *, char);
 void Rotate(Cube *, u_int, bool);
 
 void DisposeCube(Cube *);
+void CleanSolution(Cube *);
 
 void OutputHelpText();

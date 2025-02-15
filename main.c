@@ -18,6 +18,8 @@ int main(int argc, char const *argv[])
         PrintCubeRepresentation(&cube);
 
         printf("\nScramble: %s", cube.Scramble);
+        printf("\nStandard Notation: ");
+        PrintStandardNotation(cube.Scramble);
 
         printf("\nPosition: ");
         PrintPositionString(&cube);
@@ -28,7 +30,10 @@ int main(int argc, char const *argv[])
         PrintCubeRepresentation(&cube);
         
         printf("\nOriginal Solution: %s", cube.OriginalSolution);
-        printf("\nOptimized Solution (Cross only): %s\n\n", cube.Solution);
+        printf("\nOptimized Solution: %s", cube.Solution);
+        printf("\nStandard Notation: ");
+        PrintStandardNotation(cube.Solution);
+        printf("\n\n");
 
         DisposeCube(&cube);
         exit(0);
@@ -60,7 +65,10 @@ int main(int argc, char const *argv[])
             Solve(&cube);
             
             printf("\nOriginal Solution: %s", cube.OriginalSolution);
-            printf("\nOptimized Solution (Cross only): %s\n\n", cube.Solution);
+            printf("\nOptimized Solution: %s", cube.Solution);
+            printf("\nStandard Notation: ");
+            PrintStandardNotation(cube.Solution);
+            printf("\n\n");
 
             DisposeCube(&cube);
             exit(0);
