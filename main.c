@@ -64,6 +64,8 @@ int main(int argc, char const *argv[])
             
             Solve(&cube);
             
+            PrintCubeRepresentation(&cube);
+            
             printf("\nOriginal Solution: %s", cube.OriginalSolution);
             printf("\nOptimized Solution: %s", cube.Solution);
             printf("\nStandard Notation: ");

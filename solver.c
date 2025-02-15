@@ -30,8 +30,38 @@ const char CROSS_EDGE_ALGORITHMS[ EDGE_COUNT * EDGE_ORIENTATIONS ][8] = {
     { _RIGHT_I, _FRONT, _RIGHT }
 };
 
-const char F2L_ALGORITHMS[ CORNER_COUNT * CORNER_ORIENTATIONS ][ EDGE_COUNT * EDGE_ORIENTATIONS ] = {
-    // FILL THIS UP
+const char F2L_ALGORITHMS[ CORNER_COUNT * CORNER_ORIENTATIONS ][ EDGE_COUNT * EDGE_ORIENTATIONS ][24] = {
+    {},
+    {},
+    {},
+
+    {},
+    {},
+    {},
+
+    {},
+    {},
+    {},
+
+    {},
+    {},
+    {},
+
+    {},
+    {},
+    {},
+
+    {},
+    {},
+    {},
+
+    {},
+    {},
+    {},
+
+    {},
+    {},
+    {},
 };
 
 bool HasValidCross(Cube * cube) {
@@ -60,6 +90,32 @@ bool HasValidCross(Cube * cube) {
     if (color1 != DOWN || color2 != RIGHT) return false;
 
     return true;
+}
+
+bool CornerEdgeIsSolved(Cube * cube, u_int face1, u_int face2, u_int face3) {
+    u_int cubeFace1 = GetFace(cube, face1);
+    u_int cubeFace2 = GetFace(cube, face2);
+    u_int cubeFace3 = GetFace(cube, face3);
+
+    u_int cornerSquare1 = GetSquare(cube, face1, 5);
+    u_int cornerSquare2 = GetSquare(cube, face2, 7);
+    u_int cornerSquare3 = GetSquare(cube, face3, 3);
+    u_int edgeSquare1 = GetSquare(cube, face1, 4);
+    u_int edgeSquare2 = GetSquare(cube, face2, 8);
+
+    u_int cornerColor1 = SQUARE_COLOR(cube -> Faces [cubeFace1], cornerSquare1);
+    u_int cornerColor2 = SQUARE_COLOR(cube -> Faces [cubeFace2], cornerSquare2);
+    u_int cornerColor3 = SQUARE_COLOR(cube -> Faces [cubeFace3], cornerSquare3);
+
+    u_int edgeColor1 = SQUARE_COLOR(cube -> Faces [cubeFace1], edgeSquare1);
+    u_int edgeColor2 = SQUARE_COLOR(cube -> Faces [cubeFace2], edgeSquare2);
+
+    return
+        cornerColor1 == cubeFace1
+        && cornerColor2 == cubeFace2
+        && cornerColor3 == cubeFace3
+        && edgeColor1 == cubeFace1
+        && edgeColor2 == cubeFace2;
 }
 
 int LookupEdgeIndex(Cube * cube, u_int face1, u_int face2) {
@@ -101,11 +157,16 @@ int LookupCornerIndex(Cube * cube, u_int face1, u_int face2, u_int face3) {
     return ALGORITHM_NOT_FOUND;
 }
 
-int LookupCrossEdgeAlgorithm(Cube * cube, u_int face1, u_int face2) {
-    return LookupEdgeIndex(cube, face1, face2);    
+char * LookupCrossEdgeAlgorithm(Cube * cube, u_int face1, u_int face2) {
+    int index = LookupEdgeIndex(cube, face1, face2);
+
+    if (index == ALGORITHM_NOT_FOUND) return ALGORITHM_NOT_FOUND;
+
+    return CROSS_EDGE_ALGORITHMS [index];    
 }
 
 char * LookupF2LAlgorithm(Cube * cube, u_int face1, u_int face2, u_int face3) {
+    return ALGORITHM_NOT_FOUND;
     int corner = LookupCornerIndex(cube, face1, face2, face3);
 
     if (corner == ALGORITHM_NOT_FOUND) return ALGORITHM_NOT_FOUND;
@@ -118,13 +179,25 @@ char * LookupF2LAlgorithm(Cube * cube, u_int face1, u_int face2, u_int face3) {
 }
 
 void SolveEdge(Cube * cube, u_int face1, u_int face2) {
-    int algorithm = LookupCrossEdgeAlgorithm(cube, face1, face2);
+    char * algorithm = LookupCrossEdgeAlgorithm(cube, face1, face2);
 
     if (algorithm == ALGORITHM_NOT_FOUND) {
         printf("\n(!) Algorithm not found!\n");
+        return;
     }
 
-    ApplyAlgorithm(cube, CROSS_EDGE_ALGORITHMS [algorithm]);
+    ApplyAlgorithm(cube, algorithm);
+}
+
+void SolveCornerEdge(Cube * cube, u_int face1, u_int face2, u_int face3) {
+    char * algorithm = LookupF2LAlgorithm(cube, face1, face2, face3);
+
+    if (algorithm == ALGORITHM_NOT_FOUND) {
+        printf("\n(!) Algorithm not found!\n");
+        return;
+    }
+
+    ApplyAlgorithm(cube, algorithm);
 }
 
 void SolveCross(Cube * cube) {
@@ -142,7 +215,29 @@ void SolveCross(Cube * cube) {
 }
 
 void SolveF2L(Cube * cube) {
+    if (!CornerEdgeIsSolved(cube, FRONT, RIGHT, DOWN)) {
+        SolveCornerEdge(cube, FRONT, RIGHT, DOWN);
+    }
 
+    cube -> Rotation = LEFT;
+
+    if (!CornerEdgeIsSolved(cube, FRONT, RIGHT, DOWN)) {
+        SolveCornerEdge(cube, FRONT, RIGHT, DOWN);
+    }
+
+    cube -> Rotation = BACK;
+
+    if (!CornerEdgeIsSolved(cube, FRONT, RIGHT, DOWN)) {
+        SolveCornerEdge(cube, FRONT, RIGHT, DOWN);
+    }
+
+    cube -> Rotation = RIGHT;
+
+    if (!CornerEdgeIsSolved(cube, FRONT, RIGHT, DOWN)) {
+        SolveCornerEdge(cube, FRONT, RIGHT, DOWN);
+    }
+
+    cube -> Rotation = FRONT;
 }
 
 void Solve(Cube * cube) {

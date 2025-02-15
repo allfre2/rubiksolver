@@ -239,10 +239,37 @@ const u_int EDGE_LOOKUP_TABLE[ EDGE_COUNT * EDGE_ORIENTATIONS ][4] = {
 };
 
 const u_int CORNER_LOOKUP_TABLE[ CORNER_COUNT * CORNER_ORIENTATIONS ][6] = {
-    // FILL THIS UP
-    { FRONT, 5, RIGHT, 7, DOWN, 3},
-    { RIGHT, 7, DOWN, 3, FRONT, 5},
-    { DOWN, 3, FRONT, 5, RIGHT, 7},
+    { FRONT, 5, RIGHT, 7, DOWN, 3 },
+    { RIGHT, 7, DOWN, 3, FRONT, 5 },
+    { DOWN, 3, FRONT, 5, RIGHT, 7 },
+
+    { LEFT, 5, FRONT, 7, DOWN, 1 },
+    { FRONT, 7, DOWN, 1, LEFT, 5 },
+    { DOWN, 1, LEFT, 5, FRONT, 7 },
+
+    { BACK, 5, LEFT, 7, DOWN, 7 },
+    { LEFT, 7, DOWN, 7, BACK, 5 },
+    { DOWN, 7, BACK, 5, LEFT, 7 },
+
+    { RIGHT, 5, BACK, 7, DOWN, 5 },
+    { BACK, 7, DOWN, 5, RIGHT, 5 },
+    { DOWN, 5, RIGHT, 7, BACK, 7 },
+
+    { RIGHT, 1, FRONT, 3, UP, 5 },
+    { FRONT, 3, UP, 5, RIGHT, 1 },
+    { UP, 5, RIGHT, 1, FRONT, 3 },
+
+    { FRONT, 1, LEFT, 3, UP, 7 },
+    { LEFT, 3, UP, 7, FRONT, 1 },
+    { UP, 7, FRONT, 1, LEFT, 3 },
+
+    { LEFT, 1, BACK, 3, UP, 1 },
+    { BACK, 3, UP, 1, LEFT, 1 },
+    { UP, 1, LEFT, 1, BACK, 3 },
+
+    { BACK, 1, RIGHT, 3, UP, 3 },
+    { RIGHT, 3, UP, 3, BACK, 1 },
+    { UP, 3, BACK, 1, RIGHT, 3 },
 };
 
 bool IsLegalChar(char c) {

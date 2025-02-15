@@ -21,10 +21,8 @@
 #define ALGORITHM_NOT_FOUND -1
 
 extern const char CROSS_EDGE_ALGORITHMS[ EDGE_COUNT * EDGE_ORIENTATIONS ][8];
-extern const char F2L_ALGORITHMS[ CORNER_COUNT * CORNER_ORIENTATIONS ][ EDGE_COUNT * EDGE_ORIENTATIONS ];
+extern const char F2L_ALGORITHMS[ CORNER_COUNT * CORNER_ORIENTATIONS ][ EDGE_COUNT * EDGE_ORIENTATIONS ][24];
 
-char * LookupEdgeAlgorithm(Cube *, u_int, u_int);
-char * LookupF2LAlgorithm(Cube *, u_int, u_int, u_int);
 void SolveCross(Cube *);
 void SolveF2L(Cube *);
 void Solve(Cube *);

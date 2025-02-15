@@ -2,7 +2,7 @@
     #define COMMON_H
 #endif
 
-// #define EMBEDDED_BUILD
+#define EMBEDDED_BUILD
 
 #ifdef EMBEDDED_BUILD
     #define USE_32_BITS
