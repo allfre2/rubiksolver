@@ -2,11 +2,7 @@
     #define COMMON_H
 #endif
 
-#define EMBEDDED_BUILD
-
-#ifdef EMBEDDED_BUILD
-    #define USE_32_BITS
-#endif
+// #define USE_32_BITS
 
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 1

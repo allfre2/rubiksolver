@@ -4,7 +4,7 @@
 
 In Progress ...
 
-![36%](https://progress-bar.xyz/36)
+![39%](https://progress-bar.xyz/39)
 
 ## Build
 
@@ -24,7 +24,6 @@ make install
 * Rotations are done by using [bit twiddiling tricks](https://graphics.stanford.edu/~seander/bithacks.html).
 * Implements [Fridrich (CFOP)](https://ruwix.com/the-rubiks-cube/advanced-cfop-fridrich/) method to solve the cube.
 * Supports 32 or 64 bit modes.
-* Intended to fit in an [Arduino UNO](https://docs.arduino.cc/hardware/uno-rev3/#tech-specs) (32k + 2k SRAM)
 
 ## Usage
 
