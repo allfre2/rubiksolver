@@ -31,42 +31,64 @@ const char CROSS_EDGE_ALGORITHMS[ EDGE_COUNT * EDGE_ORIENTATIONS ][8] = {
 };
 
 const char F2L_ALGORITHMS[ CORNER_COUNT * CORNER_ORIENTATIONS ][ EDGE_COUNT * EDGE_ORIENTATIONS ][24] = {
-    {},
-    {},
-    {},
+    {
+        {},{},{},{},{},{},{},{},{},{},
+        "URurufUF",
+        {},{},
+        "RurUfUUFUfUUF",
+        {},{},{},{},{},{},{},{},{},
+        "ufUFURur"
+    },
+    {
+        {},{},{},{},{},{},{},{},{},{},
+        "fuFUfuF",
+        {},
+        "RuruRUruRUUr",
+        "RurUfuFufuF",
+        {},{},{},{},{},{},{},{},{},
+        "RurURur"
+    },
+    {
+        {},{},{},{},{},{},{},{},{},{},
+        "fUFufUF",
+        {},
+        "RurURUUrURur",
+        "RUruRurUUfuF",
+        {},{},{},{},{},{},{},{},{},
+        "RuruRUr"
+    },
+
+    { {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},},
+    { {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},},
+    { {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},},
+
+    { {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},},
+    { {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},},
+    { {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},},
+
+    { {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},},
+    { {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},},
+    { {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},},
 
     {},
     {},
     {},
 
-    {},
-    {},
-    {},
+    { {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},},
+    { {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},},
+    { {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},},
 
-    {},
-    {},
-    {},
+    { {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},},
+    { {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},},
+    { {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},},
 
-    {},
-    {},
-    {},
-
-    {},
-    {},
-    {},
-
-    {},
-    {},
-    {},
-
-    {},
-    {},
-    {},
+    { {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},},
+    { {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},},
+    { {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},},
 };
 
 bool HasValidCross(Cube * cube) {
 
-    // Get A lookup table ?
     u_int color1, color2;
 
     color1 = SQUARE_COLOR(cube -> Faces [DOWN], 2);
@@ -145,11 +167,18 @@ int LookupCornerIndex(Cube * cube, u_int face1, u_int face2, u_int face3) {
     for (int i = 0; i < CORNER_COUNT * CORNER_ORIENTATIONS; ++i) {
         u_int * lookup = CORNER_LOOKUP_TABLE [ i ];
 
-        u_int color1 = SQUARE_COLOR((cube -> Faces [ (lookup [0]) ]), lookup [1]);
-        u_int color2 = SQUARE_COLOR((cube -> Faces [ (lookup [2]) ]), lookup [3]);
-        u_int color3 = SQUARE_COLOR((cube -> Faces [ (lookup [4]) ]), lookup [5]);
+        u_int rotatedFace1 = GetFace(cube, lookup[0]);
+        u_int rotatedFace2 = GetFace(cube, lookup[2]);
+        u_int rotatedFace3 = GetFace(cube, lookup[4]);
+        u_int square1 = GetSquare(cube, lookup[0], lookup [1]);
+        u_int square2 = GetSquare(cube, lookup[2], lookup [3]);
+        u_int square3 = GetSquare(cube, lookup[4], lookup [5]);
 
-        if (face1 == color1 && face2 == color2 && face3 == color3) {
+        u_int color1 = SQUARE_COLOR((cube -> Faces [ rotatedFace1 ]), square1);
+        u_int color2 = SQUARE_COLOR((cube -> Faces [ rotatedFace2 ]), square2);
+        u_int color3 = SQUARE_COLOR((cube -> Faces [ rotatedFace3 ]), square3);
+
+        if (rotatedFace1 == color1 && rotatedFace2 == color2 && rotatedFace3 == color3) {
             return i;
         }
     }
@@ -166,7 +195,6 @@ char * LookupCrossEdgeAlgorithm(Cube * cube, u_int face1, u_int face2) {
 }
 
 char * LookupF2LAlgorithm(Cube * cube, u_int face1, u_int face2, u_int face3) {
-    return ALGORITHM_NOT_FOUND;
     int corner = LookupCornerIndex(cube, face1, face2, face3);
 
     if (corner == ALGORITHM_NOT_FOUND) return ALGORITHM_NOT_FOUND;

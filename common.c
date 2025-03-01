@@ -153,9 +153,6 @@ void Init() {
 
     for (int sq = 1; sq < FACE_SQUARE_COUNT+1; ++sq) {
         FACE_SQUARE_MASKS [ sq ] = ~ (SQUARE_FIRST_BYTE << (SQUARE_SIZE * (FACE_SQUARE_COUNT - sq)));
-        if (debug_enabled) {
-            //printf("\n%016llx\n", FACE_SQUARE_MASKS [sq]);
-        }
     }
 
     MOVE_FACES [ _DOWN ]    = DOWN;
