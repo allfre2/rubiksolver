@@ -254,7 +254,7 @@ const u_int CORNER_LOOKUP_TABLE[ CORNER_COUNT * CORNER_ORIENTATIONS ][6] = {
 
     { RIGHT, 1, FRONT, 3, UP, 5 },
     { FRONT, 3, UP, 5, RIGHT, 1 },
-    { UP, 5, RIGHT, 1, FRONT, 3 },
+    { UP, 5, RIGHT, 1, FRONT, 3 },//
 
     { FRONT, 1, LEFT, 3, UP, 7 },
     { LEFT, 3, UP, 7, FRONT, 1 },

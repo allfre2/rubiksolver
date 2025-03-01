@@ -70,9 +70,48 @@ const char F2L_ALGORITHMS[ CORNER_COUNT * CORNER_ORIENTATIONS ][ EDGE_COUNT * ED
     { {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},},
     { {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},},
 
-    {},
-    {},
-    {},
+    {
+        {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
+        "fUUFUfuF",
+        "RUruuRUruRUr",
+        "RUruRUruRUr", 
+        "RurUfUF",
+        {}, {}, {}, {},
+        "UURUrURur",
+        "ufUUFufUF",
+        "URUUrURur",
+        "UUfuFufUF",
+        "RUUruRUr",
+        "fuFUUfuFUfuF",
+    },
+    {
+        {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
+        "ufUF",
+        "UfUUFuRUr",
+        "UfUFUfUUF",
+        "UfuFuRUr",
+        {}, {}, {}, {},
+        "uRUrURUr",
+        "UfuFUfUUF", 
+        "RUr",
+        "UfUUFUfUUF",
+        "uRurURUr",
+        "RurUUfuF", 
+    },
+    {
+        {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, 
+        "UfUFufuF",
+        "fUFuuRUr",
+        "uRuruRUUr",
+        "uRUrUfuF",
+        {}, {}, {}, {},
+        "uRUUruRUUr",
+        "fuF", 
+        "uRUruRUUr",
+        "UfuFufuF",
+        "URur",
+        "uRUUrUfuF", 
+    },
 
     { {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},},
     { {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},},
@@ -217,15 +256,17 @@ void SolveEdge(Cube * cube, u_int face1, u_int face2) {
     ApplyAlgorithm(cube, algorithm);
 }
 
-void SolveCornerEdge(Cube * cube, u_int face1, u_int face2, u_int face3) {
+int SolveCornerEdge(Cube * cube, u_int face1, u_int face2, u_int face3) {
     char * algorithm = LookupF2LAlgorithm(cube, face1, face2, face3);
 
-    if (algorithm == ALGORITHM_NOT_FOUND) {
+    if (algorithm == ALGORITHM_NOT_FOUND || *algorithm == 0) {
         printf("\n(!) Algorithm not found!\n");
-        return;
+        return ALGORITHM_NOT_FOUND;
     }
 
     ApplyAlgorithm(cube, algorithm);
+
+    return algorithm;
 }
 
 void SolveCross(Cube * cube) {
@@ -243,26 +284,25 @@ void SolveCross(Cube * cube) {
 }
 
 void SolveF2L(Cube * cube) {
-    if (!CornerEdgeIsSolved(cube, FRONT, RIGHT, DOWN)) {
-        SolveCornerEdge(cube, FRONT, RIGHT, DOWN);
-    }
 
-    cube -> Rotation = LEFT;
+    u_int rotations[4] = { FRONT, LEFT, BACK, RIGHT };
+    int currentRotation = 0;
 
-    if (!CornerEdgeIsSolved(cube, FRONT, RIGHT, DOWN)) {
-        SolveCornerEdge(cube, FRONT, RIGHT, DOWN);
-    }
+    int missed = 0;
 
-    cube -> Rotation = BACK;
+    while (currentRotation < 4) {
 
-    if (!CornerEdgeIsSolved(cube, FRONT, RIGHT, DOWN)) {
-        SolveCornerEdge(cube, FRONT, RIGHT, DOWN);
-    }
+        u_int rotation = rotations[currentRotation];
 
-    cube -> Rotation = RIGHT;
+        cube -> Rotation = rotation;
+        
+        int found = ALGORITHM_NOT_FOUND;
+        
+        if (!CornerEdgeIsSolved(cube, FRONT, RIGHT, DOWN)) {
+            found = SolveCornerEdge(cube, FRONT, RIGHT, DOWN);
+        }
 
-    if (!CornerEdgeIsSolved(cube, FRONT, RIGHT, DOWN)) {
-        SolveCornerEdge(cube, FRONT, RIGHT, DOWN);
+        ++currentRotation;
     }
 
     cube -> Rotation = FRONT;
