@@ -54,12 +54,12 @@
 extern bool debug_enabled;
 extern bool use_terminal_colors;
 
-extern const u_int DOWN;
-extern const u_int RIGHT;
-extern const u_int FRONT;
-extern const u_int LEFT;
-extern const u_int BACK;
-extern const u_int UP;
+#define DOWN 0
+#define RIGHT 1
+#define FRONT 2
+#define LEFT 3
+#define BACK 4
+#define UP 5
 
 #define _DOWN 'D'
 #define _RIGHT 'R'
@@ -74,12 +74,12 @@ extern const u_int UP;
 #define _BACK_I 'b'
 #define _UP_I 'u'
 
-extern const u_int WHITE;
-extern const u_int GREEN;
-extern const u_int RED;
-extern const u_int BLUE;
-extern const u_int ORANGE;
-extern const u_int YELLOW;
+u_int WHITE;
+u_int GREEN;
+u_int RED;
+u_int BLUE;
+u_int ORANGE;
+u_int YELLOW;
 
 #define WHITE_CHAR 'W'
 #define GREEN_CHAR 'G'
@@ -89,10 +89,11 @@ extern const u_int YELLOW;
 #define YELLOW_CHAR 'Y'
 #define EMPTY_SQUARE_CHAR '.'
 
-extern const char SOLVED_POSITION[];
+char SOLVED_POSITION[CUBE_REPRESENTATION_LENGTH];
 extern const char LEGAL_MOVES[];
 extern const char LEGAL_COLORS[];
 
+extern const u_int COlOR_ARRANGEMENTS[SIDES][SIDES];
 char COLOR_CHARS[SIDES];
 char FACE_CHARS[SIDES];
 char * COLOR_NAMES[SIDES];
@@ -107,6 +108,7 @@ u_int MOVE_FACES[SIDES*2];
 
 extern const u_int FACE_ROTATIONS[SIDES][SIDES];
 
+#define DEFAULT_ROTATION LEFT
 #define EDGE_COUNT 12
 #define EDGE_ORIENTATIONS 2
 #define CORNER_COUNT 8
@@ -128,7 +130,8 @@ bool IsValidCubeString(char *);
 bool IsValidMoveString(char *);
 u_int GetColorValue(char);
 
-const u_int ORDER [SIDES];
+extern const u_int DEFAULT_ORDER[SIDES];
+u_int ORDER [SIDES];
 
 typedef struct {
     u_int * Faces;
@@ -145,6 +148,11 @@ typedef struct {
 
 void InitCube(Cube *);
 void ParseCube(char *, Cube *);
+void SetOrder();
+void SetColors(u_int);
+void SetFaceValues();
+void SetRepresentationPatterns();
+void SetSolvedPosition();
 void PrintPositionString(Cube *);
 void PrintStandardNotation(char *);
 

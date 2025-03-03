@@ -8,28 +8,13 @@ bool debug_enabled = false;
     bool use_terminal_colors = true;
 #endif
 
-const u_int DOWN  = 0x00;
-const u_int RIGHT = 0x01;
-const u_int FRONT = 0x02;
-const u_int LEFT  = 0x03;
-const u_int BACK  = 0x04;
-const u_int UP    = 0x05;
-
-const u_int WHITE  = DOWN;
-const u_int GREEN  = RIGHT;
-const u_int RED    = FRONT;
-const u_int BLUE   = LEFT;
-const u_int ORANGE = BACK;
-const u_int YELLOW = UP;
-
-const char SOLVED_POSITION[] = {
-    BLUE_CHAR,BLUE_CHAR,BLUE_CHAR,BLUE_CHAR,BLUE_CHAR,BLUE_CHAR,BLUE_CHAR,BLUE_CHAR,
-    RED_CHAR,RED_CHAR,RED_CHAR,RED_CHAR,RED_CHAR,RED_CHAR,RED_CHAR,RED_CHAR,
-    GREEN_CHAR,GREEN_CHAR,GREEN_CHAR,GREEN_CHAR,GREEN_CHAR,GREEN_CHAR,GREEN_CHAR,GREEN_CHAR,
-    ORANGE_CHAR,ORANGE_CHAR,ORANGE_CHAR,ORANGE_CHAR,ORANGE_CHAR,ORANGE_CHAR,ORANGE_CHAR,ORANGE_CHAR,
-    YELLOW_CHAR,YELLOW_CHAR,YELLOW_CHAR,YELLOW_CHAR,YELLOW_CHAR,YELLOW_CHAR,YELLOW_CHAR,YELLOW_CHAR,
-    WHITE_CHAR,WHITE_CHAR,WHITE_CHAR,WHITE_CHAR,WHITE_CHAR,WHITE_CHAR,WHITE_CHAR,WHITE_CHAR,
-    0
+const u_int COlOR_ARRANGEMENTS[SIDES][SIDES] = {
+    { FRONT, RIGHT, UP, LEFT, DOWN, BACK },
+    { DOWN, FRONT, LEFT, BACK, RIGHT, UP },
+    { DOWN, RIGHT, FRONT, LEFT, BACK, UP },
+    { DOWN, BACK, RIGHT, FRONT, LEFT, UP },
+    { DOWN, LEFT, BACK, RIGHT, FRONT, UP },
+    { BACK, RIGHT, DOWN, LEFT, UP, FRONT },
 };
 
 const char LEGAL_MOVES[] = {
@@ -45,15 +30,6 @@ const char LEGAL_COLORS[] = {
     BLUE_CHAR,
     ORANGE_CHAR,
     YELLOW_CHAR
-};
-
-const u_int ORDER [SIDES] = {
-    LEFT,
-    FRONT,
-    RIGHT,
-    BACK,
-    UP,
-    DOWN
 };
 
 void EnableDebug(bool flag) {
@@ -97,76 +73,20 @@ char SwitchCase(char c) {
 }
 
 void Init() {
-    COLOR_CHARS[WHITE]  = WHITE_CHAR;
-    COLOR_CHARS[GREEN]  = GREEN_CHAR;
-    COLOR_CHARS[RED]    = RED_CHAR;
-    COLOR_CHARS[BLUE]   = BLUE_CHAR;
-    COLOR_CHARS[ORANGE] = ORANGE_CHAR;
-    COLOR_CHARS[YELLOW] = YELLOW_CHAR;
 
-    FACE_CHARS[DOWN]  = 'D';
-    FACE_CHARS[RIGHT] = 'R';
-    FACE_CHARS[FRONT] = 'F';
-    FACE_CHARS[LEFT]  = 'L';
-    FACE_CHARS[BACK]  = 'B';
-    FACE_CHARS[UP]    = 'U';
+    SetOrder(DEFAULT_ORDER);
 
-    COLOR_NAMES[WHITE]  = "White";
-    COLOR_NAMES[GREEN]  = "Green";
-    COLOR_NAMES[RED]    = "Red";
-    COLOR_NAMES[BLUE]   = "Blue";
-    COLOR_NAMES[ORANGE] = "Orange";
-    COLOR_NAMES[YELLOW] = "Yellow";
+    SetColors(DEFAULT_ROTATION);
 
-    COLOR_CODES[WHITE]  = "\e[0;107m";
-    COLOR_CODES[GREEN]  = "\e[0;102m";
-    COLOR_CODES[RED]    = "\e[0;101m";
-    COLOR_CODES[BLUE]   = "\e[0;104m";
-    COLOR_CODES[ORANGE] = "\e[0m";
-    COLOR_CODES[YELLOW] = "\e[43m";
-    RESET_COLOR_CODE = "\e[0m";
+    SetFaceValues();
 
-    RepresentationPattern[0][0] = EMPTY_FACE;
-    RepresentationPattern[0][1] = UP;
-    RepresentationPattern[0][2] = EMPTY_FACE;
-    RepresentationPattern[0][3] = EMPTY_FACE;
+    SetRepresentationPatterns();
     
-    RepresentationPattern[1][0] = LEFT;
-    RepresentationPattern[1][1] = FRONT;
-    RepresentationPattern[1][2] = RIGHT;
-    RepresentationPattern[1][3] = BACK;
-
-    RepresentationPattern[2][0] = EMPTY_FACE;
-    RepresentationPattern[2][1] = DOWN;
-    RepresentationPattern[2][2] = EMPTY_FACE;
-    RepresentationPattern[2][3] = EMPTY_FACE;
-
-    SquareRepresentationPattern[0][0] = 1;
-    SquareRepresentationPattern[0][1] = 2;
-    SquareRepresentationPattern[0][2] = 3;
-    SquareRepresentationPattern[1][0] = 8;
-    SquareRepresentationPattern[1][1] = CENTER_SQUARE;
-    SquareRepresentationPattern[1][2] = 4;
-    SquareRepresentationPattern[2][0] = 7;
-    SquareRepresentationPattern[2][1] = 6;
-    SquareRepresentationPattern[2][2] = 5;
+    SetSolvedPosition();
 
     for (int sq = 1; sq < FACE_SQUARE_COUNT+1; ++sq) {
         FACE_SQUARE_MASKS [ sq ] = ~ (SQUARE_FIRST_BYTE << (SQUARE_SIZE * (FACE_SQUARE_COUNT - sq)));
     }
-
-    MOVE_FACES [ _DOWN ]    = DOWN;
-    MOVE_FACES [ _RIGHT ]   = RIGHT;
-    MOVE_FACES [ _FRONT ]   = FRONT;
-    MOVE_FACES [ _LEFT ]    = LEFT;
-    MOVE_FACES [ _BACK ]    = BACK;
-    MOVE_FACES [ _UP ]      = UP;
-    MOVE_FACES [ _DOWN_I ]  = DOWN;
-    MOVE_FACES [ _RIGHT_I ] = RIGHT;
-    MOVE_FACES [ _FRONT_I ] = FRONT;
-    MOVE_FACES [ _LEFT_I ]  = LEFT;
-    MOVE_FACES [ _BACK_I ]  = BACK;
-    MOVE_FACES [ _UP_I ]    = UP;
 }
 
 const u_int ADJACENT_SIDES[SIDES][4] = {
@@ -254,7 +174,7 @@ const u_int CORNER_LOOKUP_TABLE[ CORNER_COUNT * CORNER_ORIENTATIONS ][6] = {
 
     { RIGHT, 1, FRONT, 3, UP, 5 },
     { FRONT, 3, UP, 5, RIGHT, 1 },
-    { UP, 5, RIGHT, 1, FRONT, 3 },//
+    { UP, 5, RIGHT, 1, FRONT, 3 },
 
     { FRONT, 1, LEFT, 3, UP, 7 },
     { LEFT, 3, UP, 7, FRONT, 1 },
@@ -337,6 +257,15 @@ u_int GetColorValue(char color_char) {
     }
 }
 
+const u_int DEFAULT_ORDER[SIDES] = {
+    LEFT,
+    FRONT,
+    RIGHT,
+    BACK,
+    UP,
+    DOWN
+};
+
 void InitCube(Cube * cube) {
     ParseCube(SOLVED_POSITION, cube);
     cube -> Solved = true;
@@ -383,6 +312,105 @@ void ParseCube(char * position, Cube * cube) {
     return cube;
 }
 
+void SetOrder(u_int * order) {
+    for (int i = 0; i < SIDES; ++i) {
+        ORDER [i] = order[i];
+    }
+}
+
+void SetColors(u_int rotation) {
+
+    u_int * arrangement = COlOR_ARRANGEMENTS [rotation];
+
+    WHITE  = arrangement[0];
+    GREEN  = arrangement[1];
+    RED    =  arrangement[2];
+    BLUE   =  arrangement[3];
+    ORANGE = arrangement[4];
+    YELLOW = arrangement[5];
+
+    COLOR_CHARS[WHITE]  = WHITE_CHAR;
+    COLOR_CHARS[GREEN]  = GREEN_CHAR;
+    COLOR_CHARS[RED]    = RED_CHAR;
+    COLOR_CHARS[BLUE]   = BLUE_CHAR;
+    COLOR_CHARS[ORANGE] = ORANGE_CHAR;
+    COLOR_CHARS[YELLOW] = YELLOW_CHAR;
+    
+    COLOR_NAMES[WHITE]  = "White";
+    COLOR_NAMES[GREEN]  = "Green";
+    COLOR_NAMES[RED]    = "Red";
+    COLOR_NAMES[BLUE]   = "Blue";
+    COLOR_NAMES[ORANGE] = "Orange";
+    COLOR_NAMES[YELLOW] = "Yellow";
+    
+    COLOR_CODES[WHITE]  = "\e[0;107m";
+    COLOR_CODES[GREEN]  = "\e[0;102m";
+    COLOR_CODES[RED]    = "\e[0;101m";
+    COLOR_CODES[BLUE]   = "\e[0;104m";
+    COLOR_CODES[ORANGE] = "\e[0m";
+    COLOR_CODES[YELLOW] = "\e[43m";
+    RESET_COLOR_CODE = "\e[0m";
+}
+
+void SetFaceValues() {
+    FACE_CHARS[DOWN]  = 'D';
+    FACE_CHARS[RIGHT] = 'R';
+    FACE_CHARS[FRONT] = 'F';
+    FACE_CHARS[LEFT]  = 'L';
+    FACE_CHARS[BACK]  = 'B';
+    FACE_CHARS[UP]    = 'U';
+    
+    MOVE_FACES [ _DOWN ]    = DOWN;
+    MOVE_FACES [ _RIGHT ]   = RIGHT;
+    MOVE_FACES [ _FRONT ]   = FRONT;
+    MOVE_FACES [ _LEFT ]    = LEFT;
+    MOVE_FACES [ _BACK ]    = BACK;
+    MOVE_FACES [ _UP ]      = UP;
+    MOVE_FACES [ _DOWN_I ]  = DOWN;
+    MOVE_FACES [ _RIGHT_I ] = RIGHT;
+    MOVE_FACES [ _FRONT_I ] = FRONT;
+    MOVE_FACES [ _LEFT_I ]  = LEFT;
+    MOVE_FACES [ _BACK_I ]  = BACK;
+    MOVE_FACES [ _UP_I ]    = UP;
+}
+
+void SetRepresentationPatterns() {
+    RepresentationPattern[0][0] = EMPTY_FACE;
+    RepresentationPattern[0][1] = UP;
+    RepresentationPattern[0][2] = EMPTY_FACE;
+    RepresentationPattern[0][3] = EMPTY_FACE;
+    
+    RepresentationPattern[1][0] = LEFT;
+    RepresentationPattern[1][1] = FRONT;
+    RepresentationPattern[1][2] = RIGHT;
+    RepresentationPattern[1][3] = BACK;
+    
+    RepresentationPattern[2][0] = EMPTY_FACE;
+    RepresentationPattern[2][1] = DOWN;
+    RepresentationPattern[2][2] = EMPTY_FACE;
+    RepresentationPattern[2][3] = EMPTY_FACE;
+    
+    SquareRepresentationPattern[0][0] = 1;
+    SquareRepresentationPattern[0][1] = 2;
+    SquareRepresentationPattern[0][2] = 3;
+    SquareRepresentationPattern[1][0] = 8;
+    SquareRepresentationPattern[1][1] = CENTER_SQUARE;
+    SquareRepresentationPattern[1][2] = 4;
+    SquareRepresentationPattern[2][0] = 7;
+    SquareRepresentationPattern[2][1] = 6;
+    SquareRepresentationPattern[2][2] = 5;
+}
+
+void SetSolvedPosition() {
+    int positionIndex = 0;
+    for (int i = 0; ORDER [i]; ++i) {
+        for (int j = 0; j < FACE_SQUARE_COUNT; ++j) {
+            SOLVED_POSITION [positionIndex++] = COLOR_CHARS [ ORDER [i] ];
+        }
+    }
+    SOLVED_POSITION[positionIndex] = 0;
+}
+
 void PrintPositionString(Cube * cube) {
     for (int i = 0; i < SIDES; ++i) {
         for (int square = 1; square <= 8; ++square) {
@@ -414,16 +442,20 @@ void PrintColorNames() {
             COLOR_CHARS [ ORDER [ i ] ],
             use_terminal_colors ?  COLOR_CODES [ ORDER [ i ] ] : "",
             ' ',
-            RESET_COLOR_CODE);
+            use_terminal_colors ? RESET_COLOR_CODE : "");
     }
 }
 
 void PrintFaceOrder() {
     int i = 0;
     while (i < SIDES) {
-        printf("%c", COLOR_CHARS [ ORDER [ i ] ]);
+        printf("%s%c",
+            use_terminal_colors ?  COLOR_CODES [ ORDER [ i ] ] : "",
+            COLOR_CHARS [ ORDER [ i ] ]);
         ++i;
     }
+
+    printf("%s", use_terminal_colors ? RESET_COLOR_CODE : "");
 }
 
 void PrintFaceRow(Cube * cube, u_int face, int face_row) {
@@ -450,10 +482,10 @@ void PrintFaceRow(Cube * cube, u_int face, int face_row) {
 
     if (use_terminal_colors)
     {
-        printf("%s%c", code1, EMPTY_SQUARE_CHAR);
-        printf("%s%c", code2, (square2 == CENTER_SQUARE) ? char2 : EMPTY_SQUARE_CHAR);
-        printf("%s%c", code3, EMPTY_SQUARE_CHAR);
-        printf("%s", RESET_COLOR_CODE);
+        printf("%s%c", use_terminal_colors ? code1 : "", EMPTY_SQUARE_CHAR);
+        printf("%s%c", use_terminal_colors ? code2 : "", (use_terminal_colors && square2 == CENTER_SQUARE) ? char2 : EMPTY_SQUARE_CHAR);
+        printf("%s%c", use_terminal_colors ? code3 : "", EMPTY_SQUARE_CHAR);
+        printf("%s", use_terminal_colors ? RESET_COLOR_CODE : "");
     } else {
         printf("%c%c%c", char1, char2, char3);
     }
@@ -493,7 +525,13 @@ void PrintInvalidRepresentationMessage() {
         printf("\nFace Order is: ");
         PrintFaceOrder();
 
-        printf("\n\nTOP: %c, FRONT: %c", COLOR_CHARS [ UP ], COLOR_CHARS [ FRONT ]);
+        printf("\n\nTOP: %s%c%s, FRONT: %s%c%s",
+            use_terminal_colors ? COLOR_CODES [ UP ] : "",
+            COLOR_CHARS [ UP ],
+            use_terminal_colors ? RESET_COLOR_CODE : "",
+            use_terminal_colors ? COLOR_CODES [ FRONT ] : "",
+            COLOR_CHARS [ FRONT ],
+            use_terminal_colors ? RESET_COLOR_CODE : "");
 
         printf("\n\n");
 }
@@ -558,7 +596,6 @@ u_int GetSquare(Cube * cube, u_int face, u_int square) {
     return square;
 }
 
-// Use Lookup Table ?
 char GetMove(Cube * cube, char move) {
     switch (cube -> Rotation) {
 
