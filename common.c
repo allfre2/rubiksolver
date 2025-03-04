@@ -1,4 +1,5 @@
 #include "common.h"
+#include <stdio.h>
 
 bool debug_enabled = false;
 
@@ -31,6 +32,21 @@ const char LEGAL_COLORS[] = {
     ORANGE_CHAR,
     YELLOW_CHAR
 };
+
+const char WHITE_NAME[] = "White";
+const char GREEN_NAME[] = "Green";
+const char RED_NAME[] = "Red";
+const char BLUE_NAME[] = "Blue";
+const char ORANGE_NAME[] = "Orange";
+const char YELLOW_NAME[] = "Yellow";
+
+const char COLOR_CODES_WHITE[]  = "\e[0;107m";
+const char COLOR_CODES_GREEN[]  = "\e[0;102m";
+const char COLOR_CODES_RED[]    = "\e[0;101m";
+const char COLOR_CODES_BLUE[]   = "\e[0;104m";
+const char COLOR_CODES_ORANGE[] = "\e[0m";
+const char COLOR_CODES_YELLOW[] = "\e[43m";
+const char RESET_COLOR_CODE[] = "\e[0m";
 
 void EnableDebug(bool flag) {
     debug_enabled = flag;
@@ -75,15 +91,15 @@ char SwitchCase(char c) {
 void Init() {
 
     SetOrder(DEFAULT_ORDER);
-
+    
     SetColors(DEFAULT_ROTATION);
 
     SetFaceValues();
-
+    
     SetRepresentationPatterns();
     
     SetSolvedPosition();
-
+    
     for (int sq = 1; sq < FACE_SQUARE_COUNT+1; ++sq) {
         FACE_SQUARE_MASKS [ sq ] = ~ (SQUARE_FIRST_BYTE << (SQUARE_SIZE * (FACE_SQUARE_COUNT - sq)));
     }
@@ -314,7 +330,7 @@ void ParseCube(char * position, Cube * cube) {
 
 void SetOrder(u_int * order) {
     for (int i = 0; i < SIDES; ++i) {
-        ORDER [i] = order[i];
+        ORDER [i] = order [i];
     }
 }
 
@@ -336,20 +352,19 @@ void SetColors(u_int rotation) {
     COLOR_CHARS[ORANGE] = ORANGE_CHAR;
     COLOR_CHARS[YELLOW] = YELLOW_CHAR;
     
-    COLOR_NAMES[WHITE]  = "White";
-    COLOR_NAMES[GREEN]  = "Green";
-    COLOR_NAMES[RED]    = "Red";
-    COLOR_NAMES[BLUE]   = "Blue";
-    COLOR_NAMES[ORANGE] = "Orange";
-    COLOR_NAMES[YELLOW] = "Yellow";
+    COLOR_NAMES[WHITE]  = WHITE_NAME;
+    COLOR_NAMES[GREEN]  = GREEN_NAME;
+    COLOR_NAMES[RED]    = RED_NAME;
+    COLOR_NAMES[BLUE]   = BLUE_NAME;
+    COLOR_NAMES[ORANGE] = ORANGE_NAME;
+    COLOR_NAMES[YELLOW] = YELLOW_NAME;
     
-    COLOR_CODES[WHITE]  = "\e[0;107m";
-    COLOR_CODES[GREEN]  = "\e[0;102m";
-    COLOR_CODES[RED]    = "\e[0;101m";
-    COLOR_CODES[BLUE]   = "\e[0;104m";
-    COLOR_CODES[ORANGE] = "\e[0m";
-    COLOR_CODES[YELLOW] = "\e[43m";
-    RESET_COLOR_CODE = "\e[0m";
+    COLOR_CODES[WHITE]  = COLOR_CODES_WHITE;
+    COLOR_CODES[GREEN]  = COLOR_CODES_GREEN;
+    COLOR_CODES[RED]    = COLOR_CODES_RED;
+    COLOR_CODES[BLUE]   = COLOR_CODES_BLUE;
+    COLOR_CODES[ORANGE] = COLOR_CODES_ORANGE;
+    COLOR_CODES[YELLOW] = COLOR_CODES_YELLOW;
 }
 
 void SetFaceValues() {
@@ -437,25 +452,35 @@ void PrintStandardNotation(char * str) {
 
 void PrintColorNames() {
     for (int i = 0; i < SIDES; ++i) {
-        printf("%s: %c %s%c%s\n",
-            COLOR_NAMES [ ORDER [ i ] ],
-            COLOR_CHARS [ ORDER [ i ] ],
-            use_terminal_colors ?  COLOR_CODES [ ORDER [ i ] ] : "",
-            ' ',
-            use_terminal_colors ? RESET_COLOR_CODE : "");
+        if (use_terminal_colors) {
+            printf("%s: %c %s%c%s\n",
+                COLOR_NAMES [ ORDER [ i ] ],
+                COLOR_CHARS [ ORDER [ i ] ],
+                COLOR_CODES [ ORDER [ i ] ],
+                ' ',
+                RESET_COLOR_CODE);
+        } else {
+            printf("%s: %c\n",
+                COLOR_NAMES [ ORDER [ i ] ],
+                COLOR_CHARS [ ORDER [ i ] ]);    
+        }
     }
 }
 
 void PrintFaceOrder() {
     int i = 0;
     while (i < SIDES) {
-        printf("%s%c",
-            use_terminal_colors ?  COLOR_CODES [ ORDER [ i ] ] : "",
-            COLOR_CHARS [ ORDER [ i ] ]);
+        if (use_terminal_colors) {
+            printf("%s%c%s",
+                COLOR_CODES [ ORDER [ i ] ],
+                COLOR_CHARS [ ORDER [ i ] ],
+                RESET_COLOR_CODE);
+        } else {
+            printf("%c", COLOR_CHARS [ ORDER [ i ] ]);
+        }
+
         ++i;
     }
-
-    printf("%s", use_terminal_colors ? RESET_COLOR_CODE : "");
 }
 
 void PrintFaceRow(Cube * cube, u_int face, int face_row) {
@@ -471,9 +496,15 @@ void PrintFaceRow(Cube * cube, u_int face, int face_row) {
         color3 = SQUARE_COLOR( cube -> Faces [face], square3 );
 
     char
-        * code1 = COLOR_CODES [ color1 ],
-        * code2 = (square2 == CENTER_SQUARE) ? COLOR_CODES [ face ] : COLOR_CODES [ color2 ],
-        * code3 = COLOR_CODES [ color3 ];
+        * code1,
+        * code2,
+        * code3;
+    
+    if (use_terminal_colors) {
+        code1 = COLOR_CODES [ color1 ];
+        code2 = (square2 == CENTER_SQUARE) ? COLOR_CODES [ face ] : COLOR_CODES [ color2 ];
+        code3 = COLOR_CODES [ color3 ];
+    }
 
     char
         char1 = COLOR_CHARS [ color1 ],
@@ -482,19 +513,19 @@ void PrintFaceRow(Cube * cube, u_int face, int face_row) {
 
     if (use_terminal_colors)
     {
-        printf("%s%c", use_terminal_colors ? code1 : "", EMPTY_SQUARE_CHAR);
-        printf("%s%c", use_terminal_colors ? code2 : "", (use_terminal_colors && square2 == CENTER_SQUARE) ? char2 : EMPTY_SQUARE_CHAR);
-        printf("%s%c", use_terminal_colors ? code3 : "", EMPTY_SQUARE_CHAR);
-        printf("%s", use_terminal_colors ? RESET_COLOR_CODE : "");
+        printf("%s%c", code1, EMPTY_SQUARE_CHAR);
+        printf("%s%c", code2, (square2 == CENTER_SQUARE) ? char2 : EMPTY_SQUARE_CHAR);
+        printf("%s%c", code3, EMPTY_SQUARE_CHAR);
+        printf("%s", RESET_COLOR_CODE);
     } else {
         printf("%c%c%c", char1, char2, char3);
     }
 }
 
-// I'm sorry for this code :(
 void PrintCubeRepresentation(Cube * cube) {
+        
     printf("\n");
-
+        
     for (int row = 0; row < 3; ++row) {
         for (int face_row = 0; face_row < 3; ++face_row) {
             for (int column = 0; column < 4; ++column) {
@@ -525,13 +556,19 @@ void PrintInvalidRepresentationMessage() {
         printf("\nFace Order is: ");
         PrintFaceOrder();
 
-        printf("\n\nTOP: %s%c%s, FRONT: %s%c%s",
-            use_terminal_colors ? COLOR_CODES [ UP ] : "",
-            COLOR_CHARS [ UP ],
-            use_terminal_colors ? RESET_COLOR_CODE : "",
-            use_terminal_colors ? COLOR_CODES [ FRONT ] : "",
-            COLOR_CHARS [ FRONT ],
-            use_terminal_colors ? RESET_COLOR_CODE : "");
+        if (use_terminal_colors) {
+            printf("\n\nTOP: %s%c%s, FRONT: %s%c%s",
+                COLOR_CODES [ UP ],
+                COLOR_CHARS [ UP ],
+                RESET_COLOR_CODE,
+                COLOR_CODES [ FRONT ],
+                COLOR_CHARS [ FRONT ],
+                RESET_COLOR_CODE);
+        } else {
+            printf("\n\nTOP: %c, FRONT: %c",
+                COLOR_CHARS [ UP ],
+                COLOR_CHARS [ FRONT ]);
+        }
 
         printf("\n\n");
 }

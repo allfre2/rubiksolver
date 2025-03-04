@@ -12,9 +12,9 @@ int main(int argc, char const *argv[])
         Cube cube;
 
         InitCube(&cube);
-    
+        
         Scramble(&cube);
-
+        
         PrintCubeRepresentation(&cube);
 
         printf("\nScramble: %s", cube.Scramble);

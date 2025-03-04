@@ -60,4 +60,5 @@ Chess board pattern:
     cube is solved ...
 
 3. Bugs
+    - When using 32 bit mode segmentation fault hell
 
