@@ -89,21 +89,6 @@ u_int YELLOW;
 #define YELLOW_CHAR 'Y'
 #define EMPTY_SQUARE_CHAR '.'
 
-extern const char WHITE_NAME[];
-extern const char GREEN_NAME[];
-extern const char RED_NAME[];
-extern const char BLUE_NAME[];
-extern const char ORANGE_NAME[];
-extern const char YELLOW_NAME[];
-
-extern const char COLOR_CODES_WHITE[];
-extern const char COLOR_CODES_GREEN[];
-extern const char COLOR_CODES_RED[];
-extern const char COLOR_CODES_BLUE[];
-extern const char COLOR_CODES_ORANGE[];
-extern const char COLOR_CODES_YELLOW[];
-extern const char RESET_COLOR_CODE[];
-
 char SOLVED_POSITION[CUBE_REPRESENTATION_LENGTH];
 extern const char LEGAL_MOVES[];
 extern const char LEGAL_COLORS[];
@@ -113,7 +98,7 @@ char COLOR_CHARS[SIDES];
 char FACE_CHARS[SIDES];
 char * COLOR_NAMES[SIDES];
 char * COLOR_CODES[SIDES];
-//char * RESET_COLOR_CODE;
+char * RESET_COLOR_CODE;
 
 extern const u_int ADJACENT_SIDES[SIDES][4];
 extern const int ADJACENT_SQUARES[SIDES][4][3];

@@ -33,21 +33,6 @@ const char LEGAL_COLORS[] = {
     YELLOW_CHAR
 };
 
-const char WHITE_NAME[] = "White";
-const char GREEN_NAME[] = "Green";
-const char RED_NAME[] = "Red";
-const char BLUE_NAME[] = "Blue";
-const char ORANGE_NAME[] = "Orange";
-const char YELLOW_NAME[] = "Yellow";
-
-const char COLOR_CODES_WHITE[]  = "\e[0;107m";
-const char COLOR_CODES_GREEN[]  = "\e[0;102m";
-const char COLOR_CODES_RED[]    = "\e[0;101m";
-const char COLOR_CODES_BLUE[]   = "\e[0;104m";
-const char COLOR_CODES_ORANGE[] = "\e[0m";
-const char COLOR_CODES_YELLOW[] = "\e[43m";
-const char RESET_COLOR_CODE[] = "\e[0m";
-
 void EnableDebug(bool flag) {
     debug_enabled = flag;
 }
@@ -352,19 +337,20 @@ void SetColors(u_int rotation) {
     COLOR_CHARS[ORANGE] = ORANGE_CHAR;
     COLOR_CHARS[YELLOW] = YELLOW_CHAR;
     
-    COLOR_NAMES[WHITE]  = WHITE_NAME;
-    COLOR_NAMES[GREEN]  = GREEN_NAME;
-    COLOR_NAMES[RED]    = RED_NAME;
-    COLOR_NAMES[BLUE]   = BLUE_NAME;
-    COLOR_NAMES[ORANGE] = ORANGE_NAME;
-    COLOR_NAMES[YELLOW] = YELLOW_NAME;
+    COLOR_NAMES[WHITE]  = "White";
+    COLOR_NAMES[GREEN]  = "Green";
+    COLOR_NAMES[RED]    = "Red";
+    COLOR_NAMES[BLUE]   = "Blue";
+    COLOR_NAMES[ORANGE] = "Orange";
+    COLOR_NAMES[YELLOW] = "Yellow";
     
-    COLOR_CODES[WHITE]  = COLOR_CODES_WHITE;
-    COLOR_CODES[GREEN]  = COLOR_CODES_GREEN;
-    COLOR_CODES[RED]    = COLOR_CODES_RED;
-    COLOR_CODES[BLUE]   = COLOR_CODES_BLUE;
-    COLOR_CODES[ORANGE] = COLOR_CODES_ORANGE;
-    COLOR_CODES[YELLOW] = COLOR_CODES_YELLOW;
+    COLOR_CODES[WHITE]  = "\e[0;107m";
+    COLOR_CODES[GREEN]  = "\e[0;102m";
+    COLOR_CODES[RED]    = "\e[0;101m";
+    COLOR_CODES[BLUE]   = "\e[0;104m";
+    COLOR_CODES[ORANGE] = "\e[0m";
+    COLOR_CODES[YELLOW] = "\e[43m";
+    RESET_COLOR_CODE = "\e[0m";
 }
 
 void SetFaceValues() {
