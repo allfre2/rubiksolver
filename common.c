@@ -354,12 +354,12 @@ void SetColors(u_int rotation) {
 }
 
 void SetFaceValues() {
-    FACE_CHARS[DOWN]  = 'D';
-    FACE_CHARS[RIGHT] = 'R';
-    FACE_CHARS[FRONT] = 'F';
-    FACE_CHARS[LEFT]  = 'L';
-    FACE_CHARS[BACK]  = 'B';
-    FACE_CHARS[UP]    = 'U';
+    FACE_CHARS[DOWN]  = _DOWN;
+    FACE_CHARS[RIGHT] = _RIGHT;
+    FACE_CHARS[FRONT] = _FRONT;
+    FACE_CHARS[LEFT]  = _LEFT;
+    FACE_CHARS[BACK]  = _BACK;
+    FACE_CHARS[UP]    = _UP;
     
     MOVE_FACES [ _DOWN ]    = DOWN;
     MOVE_FACES [ _RIGHT ]   = RIGHT;
